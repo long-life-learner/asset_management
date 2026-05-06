@@ -48,6 +48,8 @@ Vagrantfile
 #-------------------------
 # Temporary Files
 #-------------------------
+tests/*
+writable/*
 writable/cache/*
 !writable/cache/index.html
 
@@ -62,7 +64,7 @@ writable/uploads/*
 
 writable/debugbar/*
 !writable/debugbar/.gitkeep
-
+writable
 php_errors.log
 
 #-------------------------

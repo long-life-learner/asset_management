@@ -15,8 +15,7 @@ class AsetTetap extends BaseController
 
     public function index(): string
     {
-
-        $data['title'] = 'Aset Tetap';
+        $data['title'] = 'Manajemen Aset Tetap';
         $users = model(UserModel::class);
         $data['user'] = $users->find(session()->get('logged_in'));
 
@@ -26,8 +25,7 @@ class AsetTetap extends BaseController
     public function distinct($param)
     {
         $model = new AsetTetapModel();
-        $uniqueValues = $model->getUniqueValues($param);
-        return $this->response->setJSON($uniqueValues);
+        return $this->response->setJSON($model->getUniqueValues($param));
     }
 
     public function dashboard()
@@ -38,7 +36,7 @@ class AsetTetap extends BaseController
 
         $data['user'] = $users->find(session()->get('logged_in'));
         $data['asetTetapSumm'] = $model->getAsetTetapSummaryByCode();
-        $data['asetTetapDetail'] = $model->searchData(["search" => 2023]);
+        $data['asetTetapDetail'] = $model->searchData(["search" => ""]);
 
         return view('aset-tetap/dashboard', $data);
     }

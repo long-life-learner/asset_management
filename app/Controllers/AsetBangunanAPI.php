@@ -15,13 +15,11 @@ class AsetBangunanAPI extends ResourceController
     public function index()
     {
         $model = new AsetBangunanModel();
-        $filter = $this->request->getGet(); // Get filter parameters from the request
-        $filter['search'] = isset($filter['search']) ? $filter['search'] : '';
+        $filter = $this->request->getGet();
+        $filter['search'] = $filter['search'] ?? '';
 
-        // Perform a database query using $filter values to search multiple columns
         $data = $model->searchData($filter);
-
-        return $this->response->setJSON($data);
+        return $this->respond($data);
     }
 
     // create a product

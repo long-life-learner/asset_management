@@ -12,33 +12,46 @@ class AsetTetapModel extends Model
     // protected $useTimestamps = true;
     public function searchData($filter)
     {
-        $query = $this->db->query("
-                SELECT subquery.*, masterbarang.merk,
-                masterbarang.namabarang,
-                masterbarang.tipebarang,
-                dataruang.namaruang
-        FROM (
-            SELECT 
-                kode,
-                tahun,
-                kondisi,
-                lokasi,
-                tanggal,
-                keterangan,
-                CASE
-                    WHEN LENGTH(kode) = 7 THEN SUBSTRING(kode, 1, 4)
-                    WHEN LENGTH(kode) = 8 AND ASCII(SUBSTRING(kode, 1, 3)) BETWEEN 65 AND 90 THEN SUBSTRING(kode, 1, 5)
-                    WHEN LENGTH(kode) = 8 AND ASCII(SUBSTRING(kode, 1, 2)) BETWEEN 65 AND 90 THEN SUBSTRING(kode, 1, 4)
-                    WHEN LENGTH(kode) = 9 THEN SUBSTRING(kode, 1, 5)
-                    ELSE NULL
-                END AS kode_group
-            FROM asetbarang
-        ) AS subquery
-        JOIN masterbarang ON subquery.kode_group = masterbarang.kodebarang
-        JOIN dataruang ON subquery.lokasi = dataruang.koderuang;");
+        $search = $this->db->escapeLikeString($filter['search'] ?? '');
+        
+        $sql = "SELECT subquery.*, 
+                       mb.merk,
+                       mb.namabarang,
+                       mb.tipebarang,
+                       dr.namaruang
+                FROM (
+                    SELECT 
+                        kode,
+                        tahun,
+                        kondisi,
+                        lokasi,
+                        tanggal,
+                        keterangan,
+                        CASE
+                            WHEN LENGTH(kode) = 7 THEN SUBSTRING(kode, 1, 4)
+                            WHEN LENGTH(kode) = 8 AND ASCII(SUBSTRING(kode, 1, 3)) BETWEEN 65 AND 90 THEN SUBSTRING(kode, 1, 5)
+                            WHEN LENGTH(kode) = 8 AND ASCII(SUBSTRING(kode, 1, 2)) BETWEEN 65 AND 90 THEN SUBSTRING(kode, 1, 4)
+                            WHEN LENGTH(kode) = 9 THEN SUBSTRING(kode, 1, 5)
+                            ELSE NULL
+                        END AS kode_group
+                    FROM asetbarang
+                    ORDER BY tahun DESC
+                ) AS subquery
+                JOIN masterbarang mb ON subquery.kode_group = mb.kodebarang
+                JOIN dataruang dr ON subquery.lokasi = dr.koderuang
+                
+                "
+                ;
 
+        if (!empty($search)) {
+            $sql .= " WHERE subquery.kode LIKE '%$search%' 
+                        OR mb.namabarang LIKE '%$search%' 
+                        OR dr.namaruang LIKE '%$search%'";
+        }
 
-        return $query->getResultArray();
+        $sql .= " ORDER BY subquery.tahun DESC";
+
+        return $this->db->query($sql)->getResultArray();
     }
 
     public function getAllData()
@@ -86,20 +99,36 @@ class AsetTetapModel extends Model
     public function getAsetTetapSummaryByCode()
     {
 
-        $query = $this->db->query("SELECT
-        CASE
-            WHEN LENGTH(kode) = 7 THEN SUBSTRING(kode, 1, 4)
-            WHEN LENGTH(kode) = 8 AND ASCII(SUBSTRING(kode, 1, 3)) BETWEEN 65 AND 90 THEN SUBSTRING(kode, 1, 5)
-              WHEN LENGTH(kode) = 8 AND ASCII(SUBSTRING(kode, 1, 2)) BETWEEN 65 AND 90 THEN SUBSTRING(kode, 1, 4)
-              WHEN LENGTH(kode) = 9 THEN SUBSTRING(kode, 1, 5)
-            ELSE NULL
-        END AS kode_group,
-        nama,
-        tipe,
-        merk,
-        COUNT(*) AS total_assets
-        FROM asetbarang 
-        GROUP BY kode_group HAVING kode_group IS NOT NULL");
+        $query = $this->db->query("
+        WITH AsetWithKodeGroup AS (
+            SELECT
+                CASE
+                    WHEN LENGTH(kode) = 7 THEN SUBSTRING(kode, 1, 4)
+                    WHEN LENGTH(kode) = 8 AND ASCII(SUBSTRING(kode, 1, 3)) BETWEEN 65 AND 90 THEN SUBSTRING(kode, 1, 5)
+                    WHEN LENGTH(kode) = 8 AND ASCII(SUBSTRING(kode, 1, 2)) BETWEEN 65 AND 90 THEN SUBSTRING(kode, 1, 4)
+                    WHEN LENGTH(kode) = 9 THEN SUBSTRING(kode, 1, 5)
+                    ELSE NULL
+                END AS kode_group,
+                nama,
+                tipe,
+                merk
+            FROM
+                asetbarang
+        )
+        SELECT
+            a.kode_group,
+            b.namabarang as nama,
+            b.tipebarang as tipe,
+            b.merk,
+            COUNT(*) AS total_assets
+        FROM
+            AsetWithKodeGroup a
+        JOIN
+            masterbarang b ON a.kode_group = b.kodebarang
+        GROUP BY
+            a.kode_group
+        HAVING
+            a.kode_group IS NOT NULL");
         return $query->getResult();
     }
 

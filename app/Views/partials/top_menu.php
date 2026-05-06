@@ -1,105 +1,62 @@
-<!-- Navbar -->
-<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+<nav class="main-header navbar navbar-expand navbar-white navbar-light border-bottom-0 shadow-sm" style="background: #fff; height: 70px;">
   <!-- Left navbar links -->
-  <ul class="navbar-nav">
+  <ul class="navbar-nav align-items-center">
     <li class="nav-item">
-      <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      <a class="nav-link text-dark" data-widget="pushmenu" href="#" role="button" style="padding: 10px 15px;"><i class="fas fa-bars"></i></a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="<?= base_url(); ?>" class="nav-link">Dashboard</a>
+      <a href="<?= base_url(); ?>" class="nav-link font-weight-bold text-dark px-3">Ringkasan</a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
-      <a href="#" class="nav-link">Panduan Pengguna</a>
+      <a href="#" class="nav-link text-muted px-3">Bantuan</a>
     </li>
   </ul>
 
   <!-- Right navbar links -->
-  <ul class="navbar-nav ml-auto">
-    <!-- Navbar Search -->
-
-    <!-- <li class="nav-item">
-      <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-        <i class="fas fa-search"></i>
-      </a>
-      <div class="navbar-search-block">
-        <form class="form-inline" action="#">
-          <div class="input-group input-group-sm">
-            <input class="form-control form-control-navbar" id='general-search' type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-              <button class="btn btn-navbar" type="button">
-                <i class="fas fa-search"></i>
-              </button>
-              <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </li> -->
-
-    <!-- <li class="nav-item">
-      <a class="nav-link" href="#" role="button" type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-lg">
-        <i class="fas fa-barcode"></i>
-      </a>
-    </li> -->
+  <ul class="navbar-nav ml-auto align-items-center">
+    
     <li class="nav-item">
-      <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+      <a class="nav-link text-muted px-3" data-widget="fullscreen" href="#" role="button" title="Layar Penuh">
         <i class="fas fa-expand-arrows-alt"></i>
       </a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-        <i class="fas fa-th-large"></i>
-      </a>
-    </li>
+
+    <div class="vr mx-2" style="width: 1px; height: 30px; background: #e2e8f0;"></div>
 
     <?php if (isset($user->username)) : ?>
       <li class="nav-item dropdown user-menu">
-        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-          <img src="<?= base_url('adminLTE/dist/img/user.png'); ?>" class="user-image img-circle elevation-2" alt="User Image">
-          <!-- <i class="far fa-lg fa-user-circle"></i> -->
-          <span class="d-none d-md-inline">
-            <?= isset($user->username) ? $user->username : 'user'; ?></span>
-
-        </a>
-        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <!-- User image -->
-          <li class="user-header bg-primary">
-            <img src="<?= base_url('adminLTE/dist/img/user.png'); ?>" class="img-circle elevation-2" alt="User Image">
-
-            <p>
-
-              <?= isset($user->username) ? $user->username : 'user'; ?>
-              <small><?= isset($user->email) ? $user->email : 'email'; ?></small>
-            </p>
-          </li>
-          <!-- Menu Body -->
-          <!-- <li class="user-body">
-          <div class="row">
-            <div class="col-4 text-center">
-              <a href="#">Followers</a>
-            </div>
-            <div class="col-4 text-center">
-              <a href="#">Sales</a>
-            </div>
-            <div class="col-4 text-center">
-              <a href="#">Friends</a>
-            </div>
+        <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-toggle="dropdown" style="padding: 10px 15px;">
+          <div class="user-avatar-wrap mr-2 shadow-sm" style="width: 35px; height: 35px; border-radius: 50%; overflow: hidden; border: 2px solid #fff;">
+             <img src="<?= base_url('adminLTE/dist/img/user.png'); ?>" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
-        </li> -->
+          <div class="d-none d-md-block text-left">
+            <span class="d-block font-weight-bold text-dark" style="line-height: 1; font-size: 0.9rem;"><?= $user->username; ?></span>
+            <small class="text-muted" style="font-size: 0.75rem;">Administrator</small>
+          </div>
+          <i class="fas fa-chevron-down ml-2 text-muted" style="font-size: 0.7rem;"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right border-0 shadow-lg" style="border-radius: 15px; overflow: hidden; margin-top: 15px;">
+          <!-- User header -->
+          <li class="user-header" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); height: auto; padding: 30px 20px;">
+            <img src="<?= base_url('adminLTE/dist/img/user.png'); ?>" class="img-circle elevation-2 mb-3" style="width: 80px; height: 80px; border: 3px solid rgba(255,255,255,0.2);">
+            <p class="text-white font-weight-bold mb-0">
+              <?= $user->username; ?>
+            </p>
+            <small class="text-white-50"><?= $user->email ?? 'admin@poltek-gt.ac.id'; ?></small>
+          </li>
           <!-- Menu Footer-->
-          <li class="user-footer">
-            <a href="#" class="btn btn-default btn-flat">Profile</a>
-            <a href="<?= base_url('logout'); ?>" class="btn btn-default btn-flat float-right">Logout</a>
+          <li class="user-footer bg-white p-3">
+            <div class="d-flex justify-content-between">
+              <a href="#" class="btn btn-light rounded-pill px-4 text-sm">Profil</a>
+              <a href="<?= base_url('logout'); ?>" class="btn btn-danger rounded-pill px-4 text-sm shadow-sm">Logout</a>
+            </div>
           </li>
         </ul>
       </li>
     <?php else : ?>
       <li class="nav-item">
-        <a href="/login" class="nav-link btn btn-primary text-white" role="button" type="button">Login</a>
+        <a href="/login" class="btn btn-primary rounded-pill px-4 shadow-sm" style="font-weight: 700;">Masuk</a>
       </li>
     <?php endif; ?>
   </ul>
 </nav>
-<!-- /.navbar -->

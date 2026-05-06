@@ -34,7 +34,7 @@ class Pelaporan extends BaseController
             }
             return $this->response->setJSON(['data' => $data, 'columns' => $columns]);
         } else {
-            // Model doesn't exist, handle accordingly (e.g., return an error response)
+            // Model doesn't exist, handle accordingly (e.g., return an error response)dataTable
             return $this->response->setJSON(['error' => 'Model not found']);
         }
     }
@@ -49,40 +49,45 @@ class Pelaporan extends BaseController
 
     public function dataTable()
     {
-        $start = $this->request->getJsonVar('start');
-        $end = $this->request->getJsonVar('end');
+        $start  = $this->request->getJsonVar('start');
+        $end    = $this->request->getJsonVar('end');
         $lokasi = $this->request->getJsonVar('lokasi');
+
         $logTransaksiModel = new LogAsetModel();
-        // STOK AWAL = KETERSEDIAAN - JUMLAH DATA PERTAMA DI PERIODE TERTENTU (YANG DICARI)
-        $stokAwalAsets = $logTransaksiModel->getStokAwal($start, $end, $lokasi);
 
-        // STOK AKHIR = KETERSEDIAAN DATA TERAKHIR DI PERIODE TERTENTU (YANG DICARI)
+        // STOK AWAL = ketersediaan sebelum periode (entri pertama di periode sebagai referensi)
+        $stokAwalAsets  = $logTransaksiModel->getStokAwal($start, $end, $lokasi);
+
+        // STOK AKHIR = ketersediaan pada entri terakhir di periode
         $stokAkhirAsets = $logTransaksiModel->getStokAkhir($start, $end, $lokasi);
-        // return $this->response->setJSON($stokAwalAsets);
-        // return $this->response->setJSON($stokAkhirAsets);
-        // dd($stokAkhirAsets);
-        $mergedData = [];
 
-
-        foreach ($stokAwalAsets as $awalItem) {
-            foreach ($stokAkhirAsets as $akhirItem) {
-                if ($awalItem->kode_aset === $akhirItem->kode_aset) {
-                    $mergedData[] = [
-                        'kode' => $awalItem->kode_aset,
-                        'namabarang' => $akhirItem->namabarang,
-                        'unit' => $akhirItem->unit,
-                        'stok_awal' => $awalItem->stok_awal,
-                        'stok_akhir' => $akhirItem->stok_akhir,
-                        'mutasi' => intval($akhirItem->stok_akhir) - intval($awalItem->stok_awal),
-                        'keterangan' => $akhirItem->keterangan
-                    ];
-                    break; // Break the inner loop once a match is found
-                }
-            }
+        // Indeks stok akhir berdasarkan kode_aset agar pencarian O(1)
+        $akhirIndex = [];
+        foreach ($stokAkhirAsets as $akhirItem) {
+            $akhirIndex[$akhirItem->kode_aset] = $akhirItem;
         }
+
+        $mergedData = [];
+        foreach ($stokAwalAsets as $awalItem) {
+            $kode = $awalItem->kode_aset;
+            if (!isset($akhirIndex[$kode])) continue;
+
+            $akhirItem  = $akhirIndex[$kode];
+            $stokAwal   = intval($awalItem->stok_awal);
+            $stokAkhir  = intval($akhirItem->stok_akhir);
+            $mutasi     = $stokAkhir - $stokAwal;
+
+            $mergedData[] = [
+                'kode'       => $kode,
+                'namabarang' => $akhirItem->namabarang,
+                'unit'       => $akhirItem->unit,
+                'stok_awal'  => $stokAwal,
+                'stok_akhir' => $stokAkhir,
+                'mutasi'     => $mutasi,
+                'keterangan' => $akhirItem->keterangan ?? ''
+            ];
+        }
+
         return $this->response->setJSON($mergedData);
-
-
-        // MUTASI BARANG = AKUMULASI JUMLAH TRANSAKSI MASUK - AKUMULASI JUMLAH TRANSAKSI KELUAR DI PERIODE TERTENTU (YANG DICARI)  
     }
 }

@@ -1,134 +1,85 @@
- <!-- Main Sidebar Container -->
- <aside class="main-sidebar sidebar-dark-primary elevation-4">
-   <!-- Brand Logo -->
-   <a href="#" class="brand-link align-middle">
-     <i class="fas fa-warehouse fa-lg mx-2"></i>
-     <!-- <img src="<?= base_url('adminLTE/dist/img/AdminLTELogo.png'); ?>" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
-     <span class="brand-text font-weight-light ">Asset Management</span>
-   </a>
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: #0f172a; border-right: 1px solid rgba(255,255,255,0.05);">
+  <!-- Brand Logo -->
+  <a href="<?= base_url('/'); ?>" class="brand-link" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding: 20px 15px;">
+    <div class="d-flex align-items-center">
+      <div class="brand-icon-wrap mr-3 shadow-sm" style="width: 35px; height: 35px; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-warehouse text-white" style="font-size: 1.1rem;"></i>
+      </div>
+      <span class="brand-text font-weight-bold" style="letter-spacing: 0.5px; font-size: 1.1rem; color: #f8fafc;">ASSET <span style="color: #3b82f6;">GT</span></span>
+    </div>
+  </a>
 
-   <!-- Sidebar -->
-   <div class="sidebar">
+  <!-- Sidebar -->
+  <div class="sidebar px-3">
+    
+    <!-- Sidebar Search -->
+    <div class="form-inline mt-4 mb-3">
+      <div class="input-group" data-widget="sidebar-search">
+        <input class="form-control form-control-sidebar border-0" type="search" placeholder="Cari menu..." style="background: rgba(255,255,255,0.05); border-radius: 8px 0 0 8px;">
+        <div class="input-group-append">
+          <button class="btn btn-sidebar border-0" style="background: rgba(255,255,255,0.05); border-radius: 0 8px 8px 0;">
+            <i class="fas fa-search fa-fw text-muted"></i>
+          </button>
+        </div>
+      </div>
+    </div>
 
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu">
+        
+        <li class="nav-item">
+          <a href="<?= base_url('/'); ?>" class="nav-link <?= current_url() == base_url('/') ? 'active' : '' ?>" style="border-radius: 10px; margin-bottom: 5px;">
+            <i class="nav-icon fas fa-th-large"></i>
+            <p>Dashboard Utama</p>
+          </a>
+        </li>
 
-     <!-- SidebarSearch Form -->
-     <div class="form-inline  mt-3">
-       <div class="input-group" data-widget="sidebar-search">
-         <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-         <div class="input-group-append">
-           <button class="btn btn-sidebar">
-             <i class="fas fa-search fa-fw"></i>
-           </button>
-         </div>
-       </div>
-     </div>
+        <li class="nav-header" style="color: #64748b; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px; padding: 15px 10px 5px;">MANAJEMEN ASET</li>
+        
+        <li class="nav-item">
+          <a href="<?= base_url('/aset-tetap/dashboard'); ?>" class="nav-link <?= strpos(current_url(), 'aset-tetap') !== false ? 'active' : '' ?>" style="border-radius: 10px; margin-bottom: 5px;">
+            <i class="nav-icon fas fa-building"></i>
+            <p>Aset Tetap</p>
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a href="<?= base_url('/aset-bergerak/dashboard'); ?>" class="nav-link <?= strpos(current_url(), 'aset-bergerak') !== false ? 'active' : '' ?>" style="border-radius: 10px; margin-bottom: 5px;">
+            <i class="nav-icon fas fa-box-open"></i>
+            <p>Aset Bergerak</p>
+          </a>
+        </li>
 
-     <!-- Sidebar Menu -->
-     <nav class="mt-2">
-       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-         <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-         <li class="nav-item">
-           <a href="<?= base_url('/'); ?>" class="nav-link">
-             <i class="nav-icon fas fa-tachometer-alt"></i>
-             <p>
-               Dashboard
-             </p>
-           </a>
-         </li>
-         <li class="nav-header">MENU U/ INPUT</li>
-         <li class="nav-item">
-           <a href="<?= base_url('/aset-tetap/dashboard'); ?>" class="nav-link">
-             <i class="nav-icon fas fa-money-bill"></i>
-             <p>
-               Aset Tetap
-             </p>
-           </a>
-         </li>
-         <li class="nav-item">
-           <a href="<?= base_url('/aset-bergerak/dashboard'); ?>" class="nav-link">
-             <i class="nav-icon fas fa-money-bill-wave"></i>
-             <p>
-               Aset Bergerak
-             </p>
-           </a>
-         </li>
-         <!-- <li class="nav-item">
-           <a href="<?= base_url('/aset-bangunan'); ?>" class="nav-link">
-             <i class="nav-icon fas fa-building"></i>
-             <p>
-               Aset Bangunan
-             </p>
-           </a>
-         </li>-->
-         <li class="nav-header">MENU U/ LAPORAN</li>
-         <li class="nav-item">
-           <a href="<?= base_url('/pelaporan'); ?>" class="nav-link">
-             <i class="nav-icon fab fa-searchengin fa-lg"></i>
-             <p>
-               Pelaporan
-             </p>
-           </a>
-         </li>
-         <!-- 
-         <li class="nav-item">
-           <a href="#" class="nav-link">
-             <i class="nav-icon fab fa-searchengin fa-lg"></i>
-             <p>
-               Pencarian & Pelaporan
-               <i class="right fas fa-angle-left"></i>
-             </p>
-           </a>
-           <ul class="nav nav-treeview">
-             <li class="nav-item">
-               <a href="<?= base_url('/pelaporan/MasterAsetModel'); ?>" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Master Aset</p>
-               </a>
-             </li>
-             <li class="nav-item">
-               <a href="<?= base_url('/pelaporan/AsetTetapModel'); ?>" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Aset Tetap</p>
-               </a>
-             </li>
-             <li class="nav-item">
-               <a href="<?= base_url('/pelaporan/AsetBergerakModel'); ?>" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Aset Bergerak</p>
-               </a>
-             </li>
-             <li class="nav-item">
-               <a href="<?= base_url('/pelaporan/transaksi'); ?>-aset" class="nav-link">
-                 <i class="far fa-circle nav-icon"></i>
-                 <p>Transaksi Aset</p>
-               </a>
-             </li>
-           </ul>
-         </li>
-         <li class="nav-item">
-           <a href="#" class="nav-link">
-             <i class="nav-icon fas fa-map-marked-alt"></i>
-             <p>
-               Peta Bangunan
+        <li class="nav-header" style="color: #64748b; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px; padding: 15px 10px 5px;">ANALISIS & DATA</li>
+        
+        <li class="nav-item">
+          <a href="<?= base_url('/pelaporan'); ?>" class="nav-link <?= strpos(current_url(), 'pelaporan') !== false ? 'active' : '' ?>" style="border-radius: 10px; margin-bottom: 5px;">
+            <i class="nav-icon fas fa-chart-pie"></i>
+            <p>Laporan Mutasi</p>
+          </a>
+        </li>
 
-             </p>
-           </a>
-         </li>
-         <li class="nav-header">ADMINISTRATOR</li>
-         <li class="nav-item">
-           <a href="<?= base_url('register') ?>" class="nav-link">
-             <i class="nav-icon fas fa-plus"></i>
-             <p>
-               Tambah
+        <li class="nav-item mt-4">
+          <a href="<?= base_url('logout'); ?>" class="nav-link" style="border-radius: 10px; color: #f87171;">
+            <i class="nav-icon fas fa-sign-out-alt"></i>
+            <p>Keluar Aplikasi</p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</aside>
 
-             </p>
-           </a>
-         </li> -->
-
-       </ul>
-     </nav>
-     <!-- /.sidebar-menu -->
-   </div>
-   <!-- /.sidebar -->
- </aside>
+<style>
+  .nav-sidebar .nav-link.active {
+    background-color: #3b82f6 !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+  .nav-sidebar .nav-link:hover:not(.active) {
+    background-color: rgba(255,255,255,0.05);
+  }
+  .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+    color: #fff;
+  }
+</style>

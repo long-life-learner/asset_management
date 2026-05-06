@@ -14,75 +14,61 @@ class AsetTetapAPI extends ResourceController
 
     public function index()
     {
-        $model = new AsetTetapModel();
-        $filter = $this->request->getGet(); // Get filter parameters from the request
-        $filter['search'] = isset($filter['search']) ? $filter['search'] : '';
+        $model  = new AsetTetapModel();
+        $filter = $this->request->getGet();
+        $filter['search'] = $filter['search'] ?? '';
 
-        // Perform a database query using $filter values to search multiple columns
         $data = $model->searchData($filter);
-
-        return $this->response->setJSON($data);
+        return $this->respond($data);
     }
 
-    // create a product
     public function create()
     {
         $model = new AsetTetapModel();
-        $kode = $this->request->getPost('kode');
-        $jumlah = $this->request->getPost('jumlah');
-        $kondisi = $this->request->getPost('kondisi');
-        $lokasi = $this->request->getPost('lokasi');
-        $keterangan = $this->request->getPost('keterangan');
+        $data  = $this->request->getPost();
 
-        if ($jumlah < 1) {
-            return $this->respondCreated(["status" => "error", "msg" => 'Jumlah harus lebih dari 0'], 400);
+        if (intval($data['jumlah'] ?? 0) < 1) {
+            return $this->fail('Jumlah aset minimal harus 1');
         }
-        $data = ['kode' => $kode, 'jumlah' => $jumlah, 'kondisi' => $kondisi, 'lokasi' => $lokasi, 'keterangan' => $keterangan];
 
-        $res = $model->insertMultipleRecords($data);
+        $result = $model->insertMultipleRecords($data);
 
-        // $model->insert($this->request->getJSON());
-        // $res = $model->find($model->getInsertID());
-        return $this->respondCreated(["status" => $res ? "success" : "error", "msg" => $res], 201);
+        if ($result === true || is_int($result)) {
+            return $this->respondCreated(['status' => 'success', 'msg' => 'Aset tetap berhasil ditambahkan']);
+        }
+
+        return $this->fail($result ?: 'Gagal menambahkan aset tetap');
     }
 
-    // update product
     public function update($id = null)
     {
         $model = new AsetTetapModel();
-        $kode = $this->request->getJsonVar('kode');
-        $json = $this->request->getJSON();
-        // Insert to Database
-        $model->update($kode, $json);
-        $response = [
-            'status'   => 200,
-            'error'    => null,
-            'messages' => [
-                'success' => 'Data Updated'
-            ]
-        ];
-        return $this->respond($response);
+        $kode  = $this->request->getJsonVar('kode') ?? $id;
+        $json  = $this->request->getJSON();
+
+        if ($model->update($kode, $json)) {
+            return $this->respond([
+                'status'   => 200,
+                'messages' => ['success' => 'Data berhasil diperbarui']
+            ]);
+        }
+        
+        return $this->fail($model->errors() ?: 'Gagal memperbarui data');
     }
 
-    // delete product
     public function delete($id = null)
     {
-        $kode = $this->request->getJsonVar('kode');
         $model = new AsetTetapModel();
-        $data = $model->find($kode);
-        if ($data) {
+        $kode  = $this->request->getJsonVar('kode') ?? $id;
+        
+        if ($model->find($kode)) {
             $model->delete($kode);
-            $response = [
+            return $this->respondDeleted([
                 'status'   => 200,
-                'error'    => null,
-                'messages' => [
-                    'success' => 'Data Deleted'
-                ]
-            ];
-
-            return $this->respondDeleted($response);
-        } else {
-            return $this->failNotFound('No Data Found with id ' . $id);
+                'messages' => ['success' => 'Data berhasil dihapus']
+            ]);
         }
+
+        return $this->failNotFound("Data dengan kode $id tidak ditemukan");
     }
 }

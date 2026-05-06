@@ -25,70 +25,75 @@ class AsetBergerak extends BaseController
     {
         $users = model(UserModel::class);
         $data['user'] = $users->find(session()->get('logged_in'));
-
-        $data['title'] = 'Aset Bergerak';
+        $data['title'] = 'Manajemen Aset Bergerak';
         return view('aset-bergerak', $data);
     }
 
     public function distinct($param)
     {
         $model = new AsetBergerakModel();
-        $uniqueValues = $model->getUniqueValues($param);
-        return $this->response->setJSON($uniqueValues);
+        return $this->response->setJSON($model->getUniqueValues($param));
     }
 
     public function select2()
     {
         $model = new AsetBergerakModel();
         $data = $model->select(['kodebarang', 'namabarang'])->findAll();
-        $select2Data = [];
-        foreach ($data as $item) {
-            $select2Data[] = [
-                'id' => $item['kodebarang'],   // Use a unique identifier as 'id'
-                'text' => $item['kodebarang'] . "-" . $item['namabarang']  // Use a display-friendly value as 'text'
+        
+        $results = array_map(function($item) {
+            return [
+                'id'   => $item['kodebarang'],
+                'text' => "{$item['kodebarang']} - {$item['namabarang']}"
             ];
-        }
+        }, $data);
 
-        // Return data as JSON
-        return $this->response->setJSON(['results' => $select2Data]);
+        return $this->response->setJSON(['results' => $results]);
     }
 
     public function transaction()
     {
         $data = $this->request->getPost();
-        // AMBIL STOK SEBELUMNYA
         $asetBergerakModel = new AsetBergerakModel();
+        
+        // 1. Hitung stok baru
+        $currentStock = intval($data['stock'] ?? 0);
+        $mutationQty  = intval($data['jumlah'] ?? 0);
+        $isMasuk      = ($data['statusbarang'] === 'Masuk');
+        
+        $newStock = $isMasuk ? ($currentStock + $mutationQty) : ($currentStock - $mutationQty);
 
+        // 2. Update Master Data
+        $updateStatus = $asetBergerakModel->update($data['kode'], [
+            "ketersediaan" => $newStock
+        ]);
 
-        // UPDATE SISA STOK PADA TABEL LOG DAN MASTER
-        $stokBaru = 0;
-
-
-        if ($data['statusbarang'] === 'Masuk') {
-            $stokBaru = intval($data['jumlah']) + intval($data['stock']);
-        } else {
-            $stokBaru =  intval($data['stock']) - intval($data['jumlah']);
+        if (!$updateStatus) {
+            return $this->response->setJSON([
+                "status" => "error", 
+                "msg"    => "Gagal update master data. Kode aset mungkin tidak ditemukan."
+            ]);
         }
 
-        if (!$asetBergerakModel->update($data['kode'], ["ketersediaan" => intval($stokBaru)])) {
-
-            return $this->response->setJSON(["status" => "error", "msg" => "Aset gagal dipindahkan, data ini belum ada di master data aset barang"]);
-        }
-
+        // 3. Simpan Log Transaksi
         $logTransaksiModel = new LogAsetModel();
         $users = model(UserModel::class);
-        // $data['user_log_in'] = $users->find(session()->get('logged_in'))->username;
+        $user  = $users->find(session()->get('logged_in'));
+        
+        $logData = [
+            'kode'          => $data['kode'],
+            'statusbarang'  => $data['statusbarang'],
+            'jumlah'        => $mutationQty,
+            'ketersediaan'  => $newStock,
+            'keterangan'    => $data['keterangan'] ?? '',
+            'tanggal'       => date("Y-m-d"),
+            'user_log_in'   => $user->username ?? 'system',
+            'lokasi'        => $asetBergerakModel->find($data['kode'])['lokasi'] ?? '-'
+        ];
 
-        $data['tanggal'] =  date("Y-m-d");
-        $data['ketersediaan'] = $stokBaru;
-        $user = $users->find(session()->get('logged_in'));
-        $data['user_log_in'] = $user->username;
-        $data['lokasi'] = $asetBergerakModel->find($data['kode'])['lokasi'];
-
-        if ($logTransaksiModel->insert($data, false)) {
-            return $this->response->setJSON(["status" => "success", "msg" => "Aset berhasil dipindahkan"]);
-        } else {
-            return $this->response->setJSON(["status" => "error", "msg" => "Aset gagal dipindahkan, terjadi kesalahan pada server"]);
+        if ($logTransaksiModel->insert($logData, false)) {
+            return $this->response->setJSON(["status" => "success", "msg" => "Transaksi aset berhasil dicatat"]);
         }
+
+        return $this->response->setJSON(["status" => "error", "msg" => "Gagal mencatat log transaksi"]);
     }
 }

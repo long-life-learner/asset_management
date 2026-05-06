@@ -27,23 +27,24 @@ class MasterAsetModel extends Model
 
     public function searchByKodeAndNama($filter)
     {
-        $search = $filter['search'];
-        $type = $filter['type'];
-        $query = $this->db->query("
-        SELECT m.kodebarang, m.namabarang, m.merk, m.tipebarang, b.ketersediaan
-            FROM masterbarang AS m
-            LEFT JOIN barangbergerak AS b
-            ON m.kodebarang = b.kodebarang
-        WHERE 
-            (m.kodebarang LIKE '%$search%' 
-            OR m.namabarang LIKE '%$search%'
-            OR m.tipebarang LIKE '%$search%'
-            OR m.merk LIKE '%$search%'
-            OR m.keterangan LIKE '%$search%')
-            AND m.jenis_aset = '$type'");
-        // Add more columns as needed
+        $search = $this->db->escapeLikeString($filter['search']);
+        $type = $this->db->escapeString($filter['type']);
 
-        return $query->getResultArray();
+        $sql = "
+            SELECT m.kodebarang, m.namabarang, m.merk, m.tipebarang,
+                   COALESCE(b.ketersediaan, 0) as ketersediaan, m.jenisbarang AS unit
+            FROM masterbarang AS m
+            LEFT JOIN (
+                SELECT kodebarang, SUM(ketersediaan) as ketersediaan 
+                FROM barangbergerak 
+                GROUP BY kodebarang
+            ) AS b ON m.kodebarang = b.kodebarang
+            WHERE (m.kodebarang LIKE '%$search%' 
+               OR m.namabarang LIKE '%$search%') AND m.jenis_aset = '$type'
+            LIMIT 20
+        ";
+
+        return $this->db->query($sql)->getResultArray();
     }
 
     public function getUniqueValues($col)

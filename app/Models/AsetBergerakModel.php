@@ -76,8 +76,8 @@ class AsetBergerakModel extends Model
             logasetbarang.keterangan 
         FROM logasetbarang 
         JOIN masterbarang ON logasetbarang.kode = masterbarang.kodebarang
-        JOIN dataruang ON logasetbarang.lokasi = dataruang.koderuang 
-        ORDER BY logasetbarang.id DESC');
+        JOIN dataruang ON logasetbarang.lokasi = dataruang.koderuang
+        ORDER BY logasetbarang.tanggal DESC');
         return $query->getResultArray();
     }
 

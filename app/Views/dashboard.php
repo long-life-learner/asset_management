@@ -1,4 +1,5 @@
 <?= $this->extend('default') ?>
+
 <?= $this->section('page_title'); ?>
 <?= $title; ?>
 <?= $this->endSection(); ?>
@@ -6,469 +7,305 @@
 <?= $this->section('context'); ?>
 <?= $title; ?>
 <?= $this->endSection(); ?>
-<!-- Default box -->
+
+<?= $this->section('css'); ?>
+<style>
+    /* ── Root Styles ── */
+    :root {
+        --glass-blue: rgba(59, 130, 246, 0.1);
+        --glass-green: rgba(34, 197, 94, 0.1);
+        --glass-red: rgba(239, 68, 68, 0.1);
+    }
+
+    .content-wrapper { background: #f8fafc !important; }
+
+    /* ── Premium Stat Cards ── */
+    .stat-card-premium {
+        background: #fff; border: none; border-radius: 20px;
+        padding: 30px; position: relative; overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01);
+    }
+    .stat-card-premium:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    }
+    .stat-card-premium .icon-box {
+        width: 60px; height: 60px; border-radius: 15px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.8rem; margin-bottom: 20px;
+    }
+    .bg-soft-red { background: var(--glass-red); color: #ef4444; }
+    .bg-soft-green { background: var(--glass-green); color: #22c55e; }
+    .bg-soft-blue { background: var(--glass-blue); color: #3b82f6; }
+    
+    .stat-val { font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 5px; }
+    .stat-label { color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+
+    /* ── Chart Container ── */
+    .chart-box-premium {
+        background: #fff; border-radius: 25px; padding: 30px;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+        border: 1px solid #f1f5f9; margin-bottom: 30px;
+    }
+
+    /* ── Table Cards ── */
+    .list-card-premium {
+        background: #fff; border-radius: 20px; border: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.03); margin-bottom: 30px;
+    }
+    .list-card-header {
+        padding: 25px 30px; border-bottom: 1px solid #f1f5f9;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .list-card-header h3 { font-size: 1.1rem; font-weight: 800; margin: 0; color: #1e293b; }
+    
+    .table-clean th { 
+        background: #f8fafc; border: none; color: #64748b; 
+        font-size: 0.7rem; text-transform: uppercase; padding: 15px 20px !important;
+    }
+    .table-clean td { padding: 18px 20px !important; border-bottom: 1px solid #f8fafc; vertical-align: middle !important; }
+
+    /* ── Badges ── */
+    .badge-premium { padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 0.7rem; }
+    
+</style>
+<?= $this->endSection(); ?>
+
 <?= $this->section('content') ?>
-<div class="container-fluid">
-  <!-- Small boxes (Stat box) -->
-  <div class="row">
-    <div class="col-lg-4 col-6">
-      <!-- small box -->
-      <div class="small-box bg-danger">
-        <div class="inner">
-          <h3><?= $today_out; ?></h3>
-
-          <p>Transaction OUT Today</p>
+<div class="container-fluid py-4">
+    
+    <!-- 1. Top Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-4 mb-4">
+            <div class="stat-card-premium h-100" data-toggle="modal" data-target="#modal-transaksi-keluar-today" style="cursor:pointer">
+                <div class="icon-box bg-soft-red"><i class="fas fa-arrow-circle-up"></i></div>
+                <div class="stat-val text-danger"><?= $today_out; ?></div>
+                <div class="stat-label text-uppercase">Keluar Hari Ini</div>
+                <div class="mt-3 text-sm text-muted">Klik untuk melihat detail <i class="fas fa-chevron-right ml-1"></i></div>
+            </div>
         </div>
-        <div class="icon">
-          <i class="fas fa-cart-arrow-down"></i>
+        <div class="col-lg-4 mb-4">
+            <div class="stat-card-premium h-100" data-toggle="modal" data-target="#modal-transaksi-masuk-today" style="cursor:pointer">
+                <div class="icon-box bg-soft-green"><i class="fas fa-arrow-circle-down"></i></div>
+                <div class="stat-val text-success"><?= $today_in; ?></div>
+                <div class="stat-label text-uppercase">Masuk Hari Ini</div>
+                <div class="mt-3 text-sm text-muted">Klik untuk melihat detail <i class="fas fa-chevron-right ml-1"></i></div>
+            </div>
         </div>
-        <a data-toggle="modal" data-target="#modal-transaksi-keluar-today" class="small-box-footer">More Detail<i class="fas fa-arrow-circle-right"></i></a>
-      </div>
+        <div class="col-lg-4 mb-4">
+            <div class="stat-card-premium h-100" data-toggle="modal" data-target="#modal-stok-0" style="cursor:pointer">
+                <div class="icon-box bg-soft-blue"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="stat-val text-primary"><?= $stok_0; ?></div>
+                <div class="stat-label text-uppercase">Stok Kosong</div>
+                <div class="mt-3 text-sm text-muted">Klik untuk restock <i class="fas fa-chevron-right ml-1"></i></div>
+            </div>
+        </div>
     </div>
-    <!-- ./col -->
-    <div class="col-lg-4 col-6">
-      <!-- small box -->
-      <div class="small-box bg-success">
-        <div class="inner">
-          <!-- <h3>53<sup style="font-size: 20px">%</sup></h3> -->
-          <h3><?= $today_in; ?></h3>
 
-          <p>Transaction IN Today</p>
+    <!-- 2. Main Analytics Chart -->
+    <div class="chart-box-premium">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h3 class="h5 font-weight-bold mb-1">Analisis Pergerakan Stok</h3>
+                <p class="text-muted small mb-0">Milestone keseluruhan inventaris dalam periode waktu tertentu.</p>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-light btn-sm rounded-pill px-3 shadow-sm" type="button" data-toggle="dropdown">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
         </div>
-        <div class="icon">
-          <i class="fas fa-cart-plus"></i>
-        </div>
-        <a data-toggle="modal" data-target="#modal-transaksi-masuk-today" class="small-box-footer">More Detail <i class="fas fa-arrow-circle-right"></i></a>
-      </div>
+        <div id="weekly-Stok-moves-container" style="height: 450px;"></div>
     </div>
-    <!-- ./col -->
-    <div class="col-lg-4 col-12">
-      <div class="small-box bg-warning">
-        <div class="inner">
-          <h3><?= $stok_0; ?></h3>
 
-          <p>Asset With ZERO Stock</p>
+    <!-- 3. Advanced Insights Grid -->
+    <div class="row mt-5">
+        <!-- Low Stock Items -->
+        <div class="col-lg-6">
+            <div class="list-card-premium h-100">
+                <div class="list-card-header">
+                    <h3><i class="fas fa-battery-quarter text-danger mr-2"></i>Top 10 Stok Terendah</h3>
+                    <span class="badge badge-danger rounded-pill">Urgent</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-clean">
+                        <thead>
+                            <tr>
+                                <th>Aset</th>
+                                <th>Lokasi</th>
+                                <th>Sisa Stok</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($top_less_stock as $p) : ?>
+                                <tr>
+                                    <td>
+                                        <div class="font-weight-bold"><?= $p['namabarang']; ?></div>
+                                        <small class="text-muted"><?= $p['kodebarang']; ?></small>
+                                    </td>
+                                    <td><i class="fas fa-map-marker-alt mr-1 text-muted"></i><?= $p['namaruang']; ?></td>
+                                    <td><span class="badge-premium bg-soft-red"><?= $p['ketersediaan']; ?> <?= $p['unit']; ?></span></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="icon">
-          <i class="fab fa-creative-commons-zero"></i>
+
+        <!-- Most Active Locations -->
+        <div class="col-lg-6">
+            <div class="list-card-premium h-100">
+                <div class="list-card-header">
+                    <h3><i class="fas fa-sync text-primary mr-2"></i>Frekuensi Transaksi Terbanyak</h3>
+                    <span class="badge badge-primary rounded-pill">Analytics</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-clean">
+                        <thead>
+                            <tr>
+                                <th>Aset & Lokasi</th>
+                                <th>Frekuensi</th>
+                                <th>Volume</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($most_transaction_by_product as $aset) : ?>
+                                <tr>
+                                    <td>
+                                        <div class="font-weight-bold"><?= $aset['namabarang']; ?></div>
+                                        <small class="text-muted"><i class="fas fa-door-open mr-1"></i><?= $aset['namaruang']; ?></small>
+                                    </td>
+                                    <td><span class="badge-premium bg-soft-blue"><?= $aset['transaction_count']; ?> Kali</span></td>
+                                    <td>
+                                        <div class="progress" style="height: 6px; border-radius: 10px; width: 60px;">
+                                            <div class="progress-bar bg-primary" style="width: <?= min(100, $aset['transaction_count'] * 10); ?>%"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <a data-toggle="modal" data-target="#modal-stok-0" class="small-box-footer">More Detail<i class="fas fa-arrow-circle-right"></i></a>
-      </div>
     </div>
-    <!-- ./col -->
-    <!-- <div class="col-lg-3 col-6">
-      <div class="small-box bg-danger">
-        <div class="inner">
-          <h3>65</h3>
 
-          <p>Unique Visitors</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-pie-graph"></i>
-        </div>
-        <a href="#" class="small-box-footer">More Detail<i class="fas fa-arrow-circle-right"></i></a>
-      </div>
-    </div> -->
-    <!-- ./col -->
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-
-      <!-- DIRECT CHAT -->
-      <div class="card direct-chat direct-chat-primary collapsed-card">
-        <div class="card-header">
-          <h3 class="card-title">Stock Movement</h3>
-
-          <div class="card-tools">
-
-            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-              <i class="fas fa-plus"></i>
-            </button>
-          </div>
-        </div>
-        <!-- /.card-header -->
-        <div class="card-body p-3">
-
-          <div id="weekly-stock-moves-container" class="w-90" style="height: 400px;"></div>
-        </div>
-
-        <!-- /.card-footer-->
-      </div>
-      <!--/.direct-chat -->
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12 col-md-6"> <!-- Top Less Stock -->
-      <div class="card bg-gradient-danger collapsed-card">
-        <div class="card-header border-0">
-          <h3 class="card-title">
-            <!-- <i class="fas fa-signal mr-1"></i> -->
-            <i class="fas fa-battery-quarter mr-1"></i>
-            Top 10 Less Stock
-          </h3>
-          <!-- card tools -->
-          <div class="card-tools">
-
-            <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse" title="Collapse">
-              <i class="fas fa-plus"></i>
-            </button>
-          </div>
-          <!-- /.card-tools -->
-        </div>
-        <div class="card-body">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th style="width: 10px">#</th>
-                <th>Code</th>
-                <th>Asset</th>
-                <th>Location</th>
-                <th>Stock</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php $i = 1; ?> <?php foreach ($top_less_stock as $produk) : ?>
-                <tr>
-                  <td><?= $i; ?></td>
-                  <td><?= $produk['kodebarang']; ?></td>
-                  <td><?= $produk['namabarang']; ?></td>
-                  <td>
-                    <?= $produk['namaruang']; ?>
-                  </td>
-                  <td><span class="badge bg-warning"> <?= $produk['ketersediaan'] . ' ' . $produk['unit']; ?></span> </td>
-                </tr>
-                <?php $i++; ?>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        </div>
-        <!-- /.card-body-->
-
-      </div>
-      <!-- /.card -->
-    </div>
-    <div class="col-12 col-md-6"> <!-- Top Most Stock -->
-      <div class="card bg-gradient-lime collapsed-card">
-        <div class="card-header border-0">
-          <h3 class="card-title">
-            <i class="fas fa-battery-full mr-1"></i>
-            Top 10 Most Stock
-          </h3>
-          <!-- card tools -->
-          <div class="card-tools">
-
-            <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse" title="Collapse">
-              <i class="fas fa-plus"></i>
-            </button>
-          </div>
-          <!-- /.card-tools -->
-        </div>
-        <div class="card-body">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th style="width: 10px">#</th>
-                <th>Code</th>
-                <th>Asset</th>
-                <th>Location</th>
-                <th>Stock</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php $i = 1; ?>
-              <?php foreach ($top_most_stock as $produk) : ?>
-                <tr>
-                  <td><?= $i; ?></td>
-                  <td><?= $produk['kodebarang']; ?></td>
-                  <td><?= $produk['namabarang']; ?></td>
-                  <td>
-                    <?= $produk['namaruang']; ?>
-                  </td>
-                  <td> <span class="badge bg-primary"> <?= $produk['ketersediaan'] . ' ' . $produk['unit']; ?></span> </td>
-                </tr>
-                <?php $i++; ?>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        </div>
-        <!-- /.card-body-->
-
-      </div>
-      <!-- /.card -->
-    </div>
-    <div class="col-12 col-md-6"> <!-- Top Product Transaction -->
-      <div class="card bg-gradient-indigo collapsed-card ">
-        <div class="card-header border-0">
-          <h3 class="card-title">
-            <i class="fas fa-map-marker-alt mr-1"></i>
-            Top 10 Most Transaction by Product
-          </h3>
-
-          <div class="card-tools">
-            <button type="button" class="btn bg-primary btn-sm" data-card-widget="collapse">
-              <i class="fas fa-plus"></i>
-            </button>
-          </div>
-        </div>
-        <div class="card-body">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th style="width: 10px">#</th>
-                <th>Code</th>
-                <th>Asset</th>
-                <th>Location</th>
-                <th>Transaction</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              <?php $i = 1; ?>
-              <?php foreach ($most_transaction_by_product as $aset) : ?>
-                <tr>
-                  <td><?= $i; ?></td>
-                  <td><?= $aset['kode']; ?></td>
-                  <td>
-                    <?= $aset['namabarang']; ?>
-                  </td>
-                  <td><?= $aset['namaruang']; ?></td>
-                  <td><span class="badge bg-pink">
-                      <?= $aset['transaction_count']; ?> Time(s)</span>
-                  </td>
-                </tr>
-
-                <?php $i++; ?>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        </div>
-        <!-- /.card-body -->
-
-        <!-- /.card-footer -->
-      </div>
-      <!-- /.card -->
-    </div>
-    <div class="col-12 col-md-6"> <!-- Top Location Transaction -->
-      <div class="card bg-gradient-orange collapsed-card">
-        <div class="card-header border-0">
-          <h3 class="card-title">
-            <i class="fas fa-map-marker-alt mr-1"></i>
-            Top 10 Most Transaction by Location
-          </h3>
-
-          <div class="card-tools">
-            <button type="button" class="btn bg-primary btn-sm" data-card-widget="collapse">
-              <i class="fas fa-plus"></i>
-            </button>
-          </div>
-        </div>
-        <div class="card-body">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th style="width: 10px">#</th>
-                <th>Code</th>
-                <th>Asset</th>
-                <th>Location</th>
-                <th>Transaction</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php $i = 1; ?>
-              <?php foreach ($most_transaction_by_location as $aset) : ?>
-                <tr>
-                  <td><?= $i; ?></td>
-                  <td><?= $aset['kode']; ?></td>
-                  <td>
-                    <?= $aset['namabarang']; ?>
-                  </td>
-                  <td><?= $aset['namaruang']; ?></td>
-                  <td><span class="badge bg-lime">
-                      <?= $aset['transaction_count']; ?> Time(s)</span>
-                  </td>
-                </tr>
-
-                <?php $i++; ?>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        </div>
-        <!-- /.card-body -->
-
-        <!-- /.card-footer -->
-      </div>
-      <!-- /.card -->
-    </div>
-  </div>
-  <!-- /.row -->
-  <!-- Main row -->
-
-  <!-- /.row (main row) -->
-</div><!-- /.container-fluid -->
-<!-- /.card -->
-
-<div class="modal fade" id="modal-stok-0">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Asset With ZERO Stock</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th style="width: 10px">#</th>
-              <th>Code</th>
-              <th>Asset</th>
-              <th>Location</th>
-              <th>Recent S0</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php $i = 1; ?>
-            <?php foreach ($stok_0_all as $aset) : ?>
-              <tr>
-                <td><?= $i; ?></td>
-                <td><?= $aset['kodebarang']; ?></td>
-                <td>
-                  <?= $aset['namabarang']; ?>
-                </td>
-                <td><span class="badge bg-danger"><?= $aset['namaruang']; ?></span></td>
-                <td><?= $aset['tanggal']; ?></td>
-              </tr>
-
-              <?php $i++; ?>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
 </div>
 
-<div class="modal fade" id="modal-transaksi-masuk-today">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Asset Transaction IN Today</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<!-- Modals with Premium Styling -->
+<div class="modal fade" id="modal-stok-0" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 25px;">
+            <div class="modal-header bg-danger py-4" style="border-radius: 25px 25px 0 0">
+                <h5 class="modal-title font-weight-bold text-white"><i class="fas fa-exclamation-circle mr-2"></i>Aset dengan Stok Kosong</h5>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body p-0">
+                <table class="table table-clean mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Kode</th>
+                            <th>Aset</th>
+                            <th>Lokasi</th>
+                            <th>Update Terakhir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $i = 1; foreach ($stok_0_all as $aset) : ?>
+                            <tr>
+                                <td><?= $i++; ?></td>
+                                <td class="font-weight-bold"><?= $aset['kodebarang']; ?></td>
+                                <td><?= $aset['namabarang']; ?></td>
+                                <td><span class="badge badge-light"><?= $aset['namaruang']; ?></span></td>
+                                <td><?= date('d M Y', strtotime($aset['tanggal'])); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Masuk Today -->
+<div class="modal fade" id="modal-transaksi-masuk-today" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 25px;">
+      <div class="modal-header bg-success py-4" style="border-radius: 25px 25px 0 0">
+        <h5 class="modal-title font-weight-bold text-white"><i class="fas fa-plus-circle mr-2"></i>Transaksi Masuk Hari Ini</h5>
+        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
       </div>
-      <div class="modal-body">
-        <table class="table table-striped">
+      <div class="modal-body p-0">
+        <table class="table table-clean mb-0">
           <thead>
             <tr>
-              <th style="width: 10px">#</th>
-              <th>Code</th>
-              <th>Asset</th>
-              <th>Location</th>
-              <th>Status</th>
-              <th>Amount</th>
-              <th>Stock</th>
+              <th>Kode</th>
+              <th>Aset</th>
+              <th>Lokasi</th>
+              <th>Jumlah</th>
               <th>PIC</th>
-              <th>Donor</th>
-              <th>Remarks</th>
+              <th>Keterangan</th>
             </tr>
           </thead>
           <tbody>
-            <?php $i = 1; ?>
             <?php foreach ($today_in_all as $aset) : ?>
               <tr>
-                <td><?= $i; ?></td>
-                <td><?= $aset['kodebarang']; ?></td>
-                <td>
-                  <?= $aset['namabarang']; ?>
-                </td>
+                <td class="font-weight-bold text-success"><?= $aset['kode']; ?></td>
+                <td><?= $aset['namabarang']; ?></td>
                 <td><?= $aset['namaruang']; ?></td>
-                <td><span class="badge bg-<?= $aset['statusbarang'] == 'Masuk' ? 'success' : 'danger' ?>"><?= $aset['statusbarang']; ?></td>
-                <td><?= $aset['jumlah']; ?></td>
-                <td><?= $aset['ketersediaan'] . ' ' . $aset['unit']; ?></td>
+                <td><span class="badge-premium bg-soft-green">+<?= $aset['jumlah']; ?></span></td>
                 <td><?= $aset['pic']; ?></td>
-                <td><?= $aset['dari']; ?></td>
-                <td><?= $aset['keterangan']; ?></td>
+                <td><small><?= $aset['keterangan']; ?></small></td>
               </tr>
-
-              <?php $i++; ?>
             <?php endforeach; ?>
           </tbody>
         </table>
       </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
     </div>
-    <!-- /.modal-content -->
   </div>
-  <!-- /.modal-dialog -->
 </div>
 
-<div class="modal fade" id="modal-transaksi-keluar-today">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Asset Transaction OUT Today</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<!-- Modal Keluar Today -->
+<div class="modal fade" id="modal-transaksi-keluar-today" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 25px;">
+      <div class="modal-header bg-danger py-4" style="border-radius: 25px 25px 0 0">
+        <h5 class="modal-title font-weight-bold text-white"><i class="fas fa-minus-circle mr-2"></i>Transaksi Keluar Hari Ini</h5>
+        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
       </div>
-      <div class="modal-body">
-        <table class="table table-striped">
+      <div class="modal-body p-0">
+        <table class="table table-clean mb-0">
           <thead>
             <tr>
-              <th style="width: 10px">#</th>
-              <th>Code</th>
-              <th>Asset</th>
-              <th>Location</th>
-              <th>Status</th>
-              <th>Amount</th>
-              <th>Stock</th>
+              <th>Kode</th>
+              <th>Aset</th>
+              <th>Lokasi</th>
+              <th>Jumlah</th>
               <th>PIC</th>
-              <th>Receiver</th>
-              <th>Remarks</th>
+              <th>Tujuan</th>
             </tr>
           </thead>
           <tbody>
-            <?php $i = 1; ?>
             <?php foreach ($today_out_all as $aset) : ?>
               <tr>
-                <td><?= $i; ?></td>
-                <td><?= $aset['kodebarang']; ?></td>
-                <td>
-                  <?= $aset['namabarang']; ?>
-                </td>
+                <td class="font-weight-bold text-danger"><?= $aset['kode']; ?></td>
+                <td><?= $aset['namabarang']; ?></td>
                 <td><?= $aset['namaruang']; ?></td>
-                <td><span class="badge bg-<?= $aset['statusbarang'] == 'Masuk' ? 'success' : 'danger' ?>"><?= $aset['statusbarang']; ?></td>
-                <td><?= $aset['jumlah']; ?></td>
-                <td> <?= $aset['ketersediaan'] . ' ' . $aset['unit']; ?></td>
+                <td><span class="badge-premium bg-soft-red">-<?= $aset['jumlah']; ?></span></td>
                 <td><?= $aset['pic']; ?></td>
                 <td><?= $aset['tujuan']; ?></td>
-                <td><?= $aset['keterangan']; ?></td>
               </tr>
-
-              <?php $i++; ?>
             <?php endforeach; ?>
           </tbody>
         </table>
       </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
     </div>
-    <!-- /.modal-content -->
   </div>
-  <!-- /.modal-dialog -->
 </div>
+
 <?= $this->endSection() ?>
 
 <?= $this->section('javascript'); ?>
@@ -479,27 +316,22 @@
 
 <script>
   (async () => {
+    const data = await fetch("<?= base_url('weeklyStockData'); ?>").then(r => r.json());
 
-    const data = await fetch(
-      "<?= base_url('weeklyStockData'); ?>"
-    ).then(response => response.json());
-
-    // Create the chart
-    Highcharts.stockChart('weekly-stock-moves-container', {
-      rangeSelector: {
-        selected: 1
-      },
-
-      title: {
-        text: 'Milestone Stock Inventory'
-      },
-
+    Highcharts.stockChart('weekly-Stok-moves-container', {
+      chart: { backgroundColor: 'transparent', style: { fontFamily: 'Outfit, sans-serif' } },
+      rangeSelector: { selected: 1, buttonTheme: { fill: '#f1f5f9', stroke: 'none', 'stroke-width': 0, r: 8, style: { color: '#64748b', fontWeight: 'bold' }, states: { select: { fill: '#3b82f6', style: { color: 'white' } } } }, inputBoxBorderColor: 'none' },
+      title: { text: 'Pergerakan Milestone Stok', align: 'left', style: { fontWeight: '800', color: '#1e293b' } },
+      credits: { enabled: false },
+      navigator: { enabled: false },
+      scrollbar: { enabled: false },
       series: [{
-        name: 'Stock',
+        name: 'Jumlah Stok',
         data: data,
-        tooltip: {
-          valueDecimals: 0
-        }
+        color: '#3b82f6',
+        type: 'areaspline',
+        fillColor: { linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 }, stops: [ [0, 'rgba(59, 130, 246, 0.2)'], [1, 'rgba(59, 130, 246, 0)'] ] },
+        tooltip: { valueDecimals: 0 }
       }]
     });
   })();

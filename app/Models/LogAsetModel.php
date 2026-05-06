@@ -19,20 +19,31 @@ class LogAsetModel extends Model
     }
     public function getStokAwal($startDate, $endDate, $lokasi)
     {
+        // Logika baru: Ambil log pertama di periode ini. 
+        // Stok Awal = (Ketersediaan log tersebut - Jumlah Mutasi log tersebut)
+        // Ini memastikan jika barang sudah ada saldo sebelumnya tapi tidak ada transaksi lama, angka tidak 0.
         $query = $this->db->query(
             "SELECT 
-            MAX(l.id),  
-            subquery.kode as kode_aset,
-            -- COALESCE(l.ketersediaan, subquery.ketersediaan) AS stok_awal
-            COALESCE(l.ketersediaan, 0) AS stok_awal
-        FROM(
-              SELECT MIN(id) AS id, kode, ketersediaan
-              FROM logasetbarang
-              WHERE tanggal >= '$startDate' AND tanggal <= '$endDate' AND lokasi = '$lokasi'
-              GROUP BY kode
-                ) AS subquery
-        LEFT JOIN logasetbarang l ON subquery.kode = l.kode AND l.tanggal < '$startDate' GROUP BY subquery.kode;"
-
+                subquery.kode AS kode_aset,
+                CASE 
+                    WHEN prev.id IS NOT NULL THEN prev.ketersediaan 
+                    ELSE (first_log.ketersediaan - CASE WHEN first_log.statusbarang = 'Masuk' THEN first_log.jumlah ELSE -first_log.jumlah END)
+                END AS stok_awal
+            FROM (
+                SELECT DISTINCT kode 
+                FROM logasetbarang 
+                WHERE tanggal >= '$startDate' AND tanggal <= '$endDate' AND lokasi = '$lokasi'
+            ) AS subquery
+            -- Cari log terakhir SEBELUM periode
+            LEFT JOIN logasetbarang prev ON prev.id = (
+                SELECT MAX(id) FROM logasetbarang 
+                WHERE kode = subquery.kode AND tanggal < '$startDate' AND lokasi = '$lokasi'
+            )
+            -- Cari log pertama DI DALAM periode (untuk hitung mundur jika prev tidak ada)
+            LEFT JOIN logasetbarang first_log ON first_log.id = (
+                SELECT MIN(id) FROM logasetbarang 
+                WHERE kode = subquery.kode AND tanggal >= '$startDate' AND tanggal <= '$endDate' AND lokasi = '$lokasi'
+            )"
         );
         return $query->getResult();
     }
@@ -41,18 +52,19 @@ class LogAsetModel extends Model
     {
         $query = $this->db->query(
             "SELECT 
-            MIN(l.id),  
-            subquery.kode as kode_aset,
-            COALESCE(l.ketersediaan, subquery.ketersediaan) AS stok_akhir,
-            subquery.namabarang, subquery.unit, subquery.keterangan
-        FROM(
-              SELECT MAX(id) AS id , kode, ketersediaan, namabarang, unit, keterangan
-              FROM logasetbarang
-              WHERE tanggal >= '$startDate' AND tanggal <= '$endDate' AND lokasi = '$lokasi'
-              GROUP BY kode
-                ) AS subquery
-        LEFT JOIN logasetbarang l ON subquery.id = l.id AND l.tanggal > '$startDate' GROUP BY subquery.id;
-            "
+                l.kode AS kode_aset,
+                l.ketersediaan AS stok_akhir,
+                mb.namabarang, 
+                mb.jenisbarang AS unit, 
+                l.keterangan
+            FROM logasetbarang l
+            JOIN (
+                SELECT MAX(id) AS max_id
+                FROM logasetbarang
+                WHERE tanggal >= '$startDate' AND tanggal <= '$endDate' AND lokasi = '$lokasi'
+                GROUP BY kode
+            ) AS latest ON l.id = latest.max_id
+            LEFT JOIN masterbarang mb ON l.kode = mb.kodebarang"
         );
 
         return $query->getResult();
