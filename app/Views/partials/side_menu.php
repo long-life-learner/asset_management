@@ -11,7 +11,7 @@
 
   <!-- Sidebar -->
   <div class="sidebar px-3">
-    
+
     <!-- Sidebar Search -->
     <div class="form-inline mt-4 mb-3">
       <div class="input-group" data-widget="sidebar-search">
@@ -27,7 +27,7 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu">
-        
+
         <li class="nav-item">
           <a href="<?= base_url('/'); ?>" class="nav-link <?= current_url() == base_url('/') ? 'active' : '' ?>" style="border-radius: 10px; margin-bottom: 5px;">
             <i class="nav-icon fas fa-th-large"></i>
@@ -36,14 +36,14 @@
         </li>
 
         <li class="nav-header" style="color: #64748b; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px; padding: 15px 10px 5px;">MANAJEMEN ASET</li>
-        
+
         <li class="nav-item">
           <a href="<?= base_url('/aset-tetap/dashboard'); ?>" class="nav-link <?= strpos(current_url(), 'aset-tetap') !== false ? 'active' : '' ?>" style="border-radius: 10px; margin-bottom: 5px;">
             <i class="nav-icon fas fa-building"></i>
             <p>Aset Tetap</p>
           </a>
         </li>
-        
+
         <li class="nav-item">
           <a href="<?= base_url('/aset-bergerak/dashboard'); ?>" class="nav-link <?= strpos(current_url(), 'aset-bergerak') !== false ? 'active' : '' ?>" style="border-radius: 10px; margin-bottom: 5px;">
             <i class="nav-icon fas fa-box-open"></i>
@@ -51,8 +51,15 @@
           </a>
         </li>
 
+        <li class="nav-item">
+          <a href="<?= base_url('/master-aset'); ?>" class="nav-link <?= strpos(current_url(), 'master-aset') !== false ? 'active' : '' ?>" style="border-radius: 10px; margin-bottom: 5px;">
+            <i class="nav-icon fas fa-database"></i>
+            <p>Master Aset</p>
+          </a>
+        </li>
+
         <li class="nav-header" style="color: #64748b; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px; padding: 15px 10px 5px;">ANALISIS & DATA</li>
-        
+
         <li class="nav-item">
           <a href="<?= base_url('/pelaporan'); ?>" class="nav-link <?= strpos(current_url(), 'pelaporan') !== false ? 'active' : '' ?>" style="border-radius: 10px; margin-bottom: 5px;">
             <i class="nav-icon fas fa-chart-pie"></i>
@@ -76,10 +83,12 @@
     background-color: #3b82f6 !important;
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
   }
+
   .nav-sidebar .nav-link:hover:not(.active) {
-    background-color: rgba(255,255,255,0.05);
+    background-color: rgba(255, 255, 255, 0.05);
   }
-  .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+
+  .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active {
     color: #fff;
   }
 </style>

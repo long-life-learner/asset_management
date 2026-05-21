@@ -8,7 +8,7 @@ class MasterAsetModel extends Model
 {
     protected $table = 'masterbarang';
     protected $primaryKey = 'kodebarang';
-    protected $allowedFields = ['kodebarang', 'namabarang', 'jenisbarang', 'tipebarang', 'jumlah', 'keterangan', 'merk'];
+    protected $allowedFields = ['kodebarang', 'namabarang', 'jenisbarang', 'tipebarang', 'jumlah', 'keterangan', 'merk', 'jenis_aset'];
     // protected $useTimestamps = true;
     public function searchData($filter)
     {

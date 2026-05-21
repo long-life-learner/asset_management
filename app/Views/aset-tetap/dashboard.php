@@ -343,6 +343,32 @@ $(document).ready(function() {
             error: (err) => Swal.fire('Error', 'Gagal memproses file', 'error')
         });
     });
+    // 6. Form: Tambah Master Aset
+    $('#form-tambah-master').submit(function(e) {
+        e.preventDefault();
+        const btn = $(this).find('button[type="submit"]');
+        btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...');
+
+        $.ajax({
+            url: "<?= base_url('master-aset/store'); ?>",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function(res) {
+                if(res.status === 'success') {
+                    $('#modal-tambah-master').modal('hide');
+                    Swal.fire('Berhasil!', res.msg, 'success').then(() => window.location.reload());
+                } else {
+                    Swal.fire('Gagal!', res.msg, 'error');
+                }
+            },
+            error: function() {
+                Swal.fire('Error!', 'Terjadi kesalahan sistem atau kode sudah terpakai.', 'error');
+            },
+            complete: function() {
+                btn.prop('disabled', false).html('Simpan Master Aset');
+            }
+        });
+    });
 });
 </script>
 <?= $this->endSection(); ?>

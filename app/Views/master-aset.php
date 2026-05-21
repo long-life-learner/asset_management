@@ -208,14 +208,7 @@
           width: 150,
           filtering: false,
         },
-        {
-          filtering: false,
-          validate: "required",
-          name: "jumlah",
-          title: "Jumlah",
-          type: "number",
-          width: 100,
-        },
+
         {
           name: "keterangan",
           title: "Keterangan",

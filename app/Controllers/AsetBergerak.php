@@ -39,8 +39,8 @@ class AsetBergerak extends BaseController
     {
         $model = new AsetBergerakModel();
         $data = $model->select(['kodebarang', 'namabarang'])->findAll();
-        
-        $results = array_map(function($item) {
+
+        $results = array_map(function ($item) {
             return [
                 'id'   => $item['kodebarang'],
                 'text' => "{$item['kodebarang']} - {$item['namabarang']}"
@@ -54,12 +54,12 @@ class AsetBergerak extends BaseController
     {
         $data = $this->request->getPost();
         $asetBergerakModel = new AsetBergerakModel();
-        
+
         // 1. Hitung stok baru
         $currentStock = intval($data['stock'] ?? 0);
         $mutationQty  = intval($data['jumlah'] ?? 0);
         $isMasuk      = ($data['statusbarang'] === 'Masuk');
-        
+
         $newStock = $isMasuk ? ($currentStock + $mutationQty) : ($currentStock - $mutationQty);
 
         // 2. Update Master Data
@@ -69,7 +69,7 @@ class AsetBergerak extends BaseController
 
         if (!$updateStatus) {
             return $this->response->setJSON([
-                "status" => "error", 
+                "status" => "error",
                 "msg"    => "Gagal update master data. Kode aset mungkin tidak ditemukan."
             ]);
         }
@@ -78,7 +78,14 @@ class AsetBergerak extends BaseController
         $logTransaksiModel = new LogAsetModel();
         $users = model(UserModel::class);
         $user  = $users->find(session()->get('logged_in'));
-        
+
+        if (!$isMasuk && $newStock < 0) {
+            return $this->response->setJSON([
+                "status" => "error",
+                "msg"    => "Jumlah keluar melebihi stok tersedia"
+            ]);
+        }
+
         $logData = [
             'kode'          => $data['kode'],
             'statusbarang'  => $data['statusbarang'],
@@ -87,7 +94,10 @@ class AsetBergerak extends BaseController
             'keterangan'    => $data['keterangan'] ?? '',
             'tanggal'       => date("Y-m-d"),
             'user_log_in'   => $user->username ?? 'system',
-            'lokasi'        => $asetBergerakModel->find($data['kode'])['lokasi'] ?? '-'
+            'lokasi'        => $asetBergerakModel->find($data['kode'])['lokasi'] ?? '-',
+            'pic'           => $data['pic'] ?? '',
+            'dari'          => $data['dari'] ?? '',
+            'tujuan'        => $data['tujuan'] ?? ''
         ];
 
         if ($logTransaksiModel->insert($logData, false)) {

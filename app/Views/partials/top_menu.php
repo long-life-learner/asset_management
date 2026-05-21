@@ -1,3 +1,5 @@
+<?php $auth = service('authentication'); $user = $auth->check() ? $auth->user() : null; ?>
+
 <nav class="main-header navbar navbar-expand navbar-white navbar-light border-bottom-0 shadow-sm" style="background: #fff; height: 70px;">
   <!-- Left navbar links -->
   <ul class="navbar-nav align-items-center">
@@ -7,14 +9,11 @@
     <li class="nav-item d-none d-sm-inline-block">
       <a href="<?= base_url(); ?>" class="nav-link font-weight-bold text-dark px-3">Ringkasan</a>
     </li>
-    <li class="nav-item d-none d-sm-inline-block">
-      <a href="#" class="nav-link text-muted px-3">Bantuan</a>
-    </li>
   </ul>
 
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto align-items-center">
-    
+
     <li class="nav-item">
       <a class="nav-link text-muted px-3" data-widget="fullscreen" href="#" role="button" title="Layar Penuh">
         <i class="fas fa-expand-arrows-alt"></i>
@@ -23,11 +22,11 @@
 
     <div class="vr mx-2" style="width: 1px; height: 30px; background: #e2e8f0;"></div>
 
-    <?php if (isset($user->username)) : ?>
+    <?php if ($user) : ?>
       <li class="nav-item dropdown user-menu">
         <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-toggle="dropdown" style="padding: 10px 15px;">
           <div class="user-avatar-wrap mr-2 shadow-sm" style="width: 35px; height: 35px; border-radius: 50%; overflow: hidden; border: 2px solid #fff;">
-             <img src="<?= base_url('adminLTE/dist/img/user.png'); ?>" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="<?= base_url('adminLTE/dist/img/user.png'); ?>" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
           <div class="d-none d-md-block text-left">
             <span class="d-block font-weight-bold text-dark" style="line-height: 1; font-size: 0.9rem;"><?= $user->username; ?></span>

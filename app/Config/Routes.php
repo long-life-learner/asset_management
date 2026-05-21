@@ -27,8 +27,8 @@ $routes->set404Override(function () {
 
 
 // // MASTER ASET
-// $routes->get('/master-aset', 'MasterAset::index', ['filter' => 'role:administrator']);
-// $routes->get('/master-aset/distinct/(:alpha)', 'MasterAset::distinct/$1', ['filter' => 'role:administrator']);
+$routes->get('/master-aset', 'MasterAset::index', ['filter' => 'role:administrator']);
+$routes->get('/master-aset/distinct/(:alpha)', 'MasterAset::distinct/$1', ['filter' => 'role:administrator']);
 
 // // PELAPORAN
 // $routes->get('/pelaporan', 'Pelaporan::index', ['filter' => 'role:administrator, user']);
@@ -44,12 +44,18 @@ $routes->get('/aset-tetap/search-last-code/(:segment)', 'AsetTetap::searchLastCo
 $routes->post('/aset-tetap/upload', 'AsetTetap::import');
 $routes->resource('AsetTetapAPI');
 
-$routes->post('/aset-bergerak/transaksi', 'AsetBergerak::transaction', ['filter' => 'role:administrator']);
+$routes->post('/aset-bergerak/transaksi', 'AsetBergerak::transaction', ['filter' => 'role:administrator, user']);
 $routes->get('/aset-bergerak/dashboard', 'AsetBergerak::dashboard', ['filter' => 'role:administrator, user']);
 $routes->resource('AsetBergerakAPI');
 
 $routes->get('/master-aset/search', 'MasterAset::search');
 $routes->get('/master-aset/search-last-code', 'MasterAset::searchLastCode');
+$routes->post('/master-aset/store', 'MasterAset::store', ['filter' => 'role:administrator']);
+
+// Protect MasterAsetAPI write operations to admin only
+$routes->post('/MasterAsetAPI', 'MasterAsetAPI::create', ['filter' => 'role:administrator']);
+$routes->put('/MasterAsetAPI/(:any)', 'MasterAsetAPI::update/$1', ['filter' => 'role:administrator']);
+$routes->delete('/MasterAsetAPI/(:any)', 'MasterAsetAPI::delete/$1', ['filter' => 'role:administrator']);
 $routes->resource('MasterAsetAPI');
 $routes->resource('AsetBangunanAPI');
 
