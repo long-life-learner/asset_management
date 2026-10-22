@@ -22,4 +22,16 @@ class Auth extends MythAuthConfig
      * Set to false to turn off the forgot‑password functionality.
      */
     public $activeResetter = false;
+
+    /**
+     * If true, will redirect instead of throwing exceptions
+     * when a user doesn't have sufficient permissions.
+     * This prevents PermissionException from causing 500 errors in CI4 4.5+.
+     */
+    public $silent = true;
+
+    /**
+     * Landing route after login or when permission is denied (silent mode).
+     */
+    public $landingRoute = '/';
 }
