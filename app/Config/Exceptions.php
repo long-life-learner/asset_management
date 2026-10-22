@@ -5,6 +5,7 @@ namespace Config;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Debug\ExceptionHandler;
 use CodeIgniter\Debug\ExceptionHandlerInterface;
+use Myth\Auth\Exceptions\PermissionException;
 use Psr\Log\LogLevel;
 use Throwable;
 
@@ -99,6 +100,13 @@ class Exceptions extends BaseConfig
      */
     public function handler(int $statusCode, Throwable $exception): ExceptionHandlerInterface
     {
+        // Redirect to home with error if user doesn't have sufficient role/permissions
+        if ($exception instanceof PermissionException) {
+            session()->setFlashdata('error', $exception->getMessage());
+            header('Location: ' . base_url());
+            exit;
+        }
+
         return new ExceptionHandler($this);
     }
 }
