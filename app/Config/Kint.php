@@ -3,10 +3,6 @@
 namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
-use Kint\Parser\ConstructablePluginInterface;
-use Kint\Renderer\AbstractRenderer;
-use Kint\Renderer\Rich\TabPluginInterface;
-use Kint\Renderer\Rich\ValuePluginInterface;
 
 /**
  * --------------------------------------------------------------------------
@@ -27,8 +23,7 @@ class Kint extends BaseConfig
     */
 
     /**
-     * @var array<int, ConstructablePluginInterface|string>
-     * @phpstan-var list<class-string<ConstructablePluginInterface>|ConstructablePluginInterface>
+     * @var array
      */
     public $plugins;
 
@@ -43,17 +38,15 @@ class Kint extends BaseConfig
     */
     public string $richTheme = 'aante-light.css';
     public bool $richFolder  = false;
-    public int $richSort     = AbstractRenderer::SORT_FULL;
+    public int $richSort     = 4; // AbstractRenderer::SORT_FULL (removed in Kint 6.x)
 
     /**
      * @var array<string, string>
-     * @phpstan-var array<string, class-string<ValuePluginInterface>>
      */
     public $richObjectPlugins;
 
     /**
      * @var array<string, string>
-     * @phpstan-var array<string, class-string<TabPluginInterface>>
      */
     public $richTabPlugins;
 
