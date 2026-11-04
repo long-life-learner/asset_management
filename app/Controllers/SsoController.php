@@ -48,6 +48,12 @@ class SsoController extends BaseController
             . '/login?client_id=' . urlencode($this->clientId)
             . '&redirect_uri='    . urlencode($this->callbackUrl);
 
+        // Teruskan pesan error (misal: akses ditolak) ke SSO Server agar tampil di halaman login
+        $errorMsg = session()->getFlashdata('error');
+        if (!empty($errorMsg)) {
+            $ssoLoginUrl .= '&error=' . urlencode($errorMsg);
+        }
+
         return redirect()->to($ssoLoginUrl);
     }
 
@@ -103,8 +109,20 @@ class SsoController extends BaseController
             return redirect()->to('/sso-login')->with('error', 'SSO Gagal: ' . $errMsg);
         }
 
-        // ---- Tiket Valid → Simpan profil ke Session CI4 ----
+        // ---- Tiket Valid → Periksa izin akses berdasarkan role ----
         $profile = $response['user_profile'];
+
+        // Role yang DIIZINKAN mengakses aplikasi Aset (selain Mahasiswa)
+        $allowedRoles = ['Admin', 'Dosen', 'Staff', 'Tendik', 'Teknisi'];
+        $userRole     = $profile['role'] ?? '';
+
+        if (strtolower($userRole) === 'mahasiswa') {
+            log_message('warning', '[SSO] Akses ditolak untuk Mahasiswa: ' . ($profile['email'] ?? '(unknown)'));
+            return redirect()->to('/sso-login')->with(
+                'error',
+                'Akses ditolak. Aplikasi Manajemen Aset hanya dapat diakses oleh Dosen dan Staf Politeknik GT.'
+            );
+        }
 
         $session = session();
         $session->set([
