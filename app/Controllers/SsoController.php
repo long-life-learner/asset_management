@@ -48,13 +48,20 @@ class SsoController extends BaseController
             . '/login?client_id=' . urlencode($this->clientId)
             . '&redirect_uri='    . urlencode($this->callbackUrl);
 
-        // Teruskan pesan error (misal: akses ditolak) ke SSO Server agar tampil di halaman login
-        $errorMsg = session()->getFlashdata('error');
-        if (!empty($errorMsg)) {
-            $ssoLoginUrl .= '&error=' . urlencode($errorMsg);
-        }
-
         return redirect()->to($ssoLoginUrl);
+    }
+
+    // =========================================================================
+    // Halaman Akses Ditolak (untuk role Mahasiswa)
+    // =========================================================================
+
+    /**
+     * /akses-ditolak
+     * Ditampilkan setelah SSO logout selesai, khusus untuk user yang tidak diizinkan.
+     */
+    public function aksesditolak(): string
+    {
+        return view('auth/akses_ditolak');
     }
 
     // =========================================================================
@@ -118,10 +125,14 @@ class SsoController extends BaseController
 
         if (strtolower($userRole) === 'mahasiswa') {
             log_message('warning', '[SSO] Akses ditolak untuk Mahasiswa: ' . ($profile['email'] ?? '(unknown)'));
-            return redirect()->to('/sso-login')->with(
-                'error',
-                'Akses ditolak. Aplikasi Manajemen Aset hanya dapat diakses oleh Dosen dan Staf Politeknik GT.'
-            );
+
+            // Redirect ke SSO logout dulu agar session SSO dihapus,
+            // sehingga tidak terjadi redirect loop (SSO tidak auto-login lagi).
+            // Setelah logout SSO, arahkan ke halaman "Akses Ditolak" lokal.
+            $aksesditolakUrl = base_url('/akses-ditolak');
+            $ssoLogoutUrl    = $this->ssoServer . '/logout?redirect_uri=' . urlencode($aksesditolakUrl);
+
+            return redirect()->to($ssoLogoutUrl);
         }
 
         $session = session();

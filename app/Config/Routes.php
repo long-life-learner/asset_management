@@ -19,6 +19,8 @@ $routes->get('/sso-login', 'SsoController::login');
 $routes->get('/sso-callback', 'SsoController::callback');
 // Logout: hapus session lokal dan redirect ke SSO logout
 $routes->get('/logout', 'SsoController::logout');
+// Halaman akses ditolak (Mahasiswa / role tidak diizinkan)
+$routes->get('/akses-ditolak', 'SsoController::aksesditolak');
 
 // =========================================================================
 // ROUTE TERPROTEKSI — Wajib login SSO (filter 'sso' per-route)
