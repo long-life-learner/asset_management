@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Models\LogAsetModel;
 use App\Models\AsetBergerakModel;
 use CodeIgniter\API\ResponseTrait;
-use Myth\Auth\Models\UserModel;
 
 class Home extends BaseController
 {
@@ -14,11 +13,11 @@ class Home extends BaseController
     public function index(): string
     {
         $data['title'] = 'Dashboard';
-        $users = model(UserModel::class);
         $logModel = new LogAsetModel();
         $asetBergerakModel = new AsetBergerakModel();
-        
-        $data['user'] = $users->find(session()->get('logged_in'));
+
+        // Ambil profil user dari session SSO (bukan dari Myth/Auth UserModel)
+        $data['user'] = session()->get('sso_profile') ?? [];
 
         // 1. Stats Summary
         $data['today_in'] = $logModel->where('tanggal', date('Y-m-d'))->where('statusbarang', 'masuk')->countAllResults();

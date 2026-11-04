@@ -2,8 +2,7 @@
 
 namespace Config;
 
-use App\Filters\Auth;
-use App\Filters\Noauth;
+use App\Filters\SsoFilter;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -26,10 +25,13 @@ class Filters extends BaseConfig
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
-        'cors'     => \App\Filters\Cors::class,
-        'login'      => \Myth\Auth\Filters\LoginFilter::class,
-        'role'       => \Myth\Auth\Filters\RoleFilter::class,
-        'permission' => \Myth\Auth\Filters\PermissionFilter::class,
+        'cors'          => \App\Filters\Cors::class,
+        // Filter SSO: melindungi route dengan autentikasi SSO Politeknik GT
+        'sso'           => \App\Filters\SsoFilter::class,
+        // Filter Myth/Auth dipertahankan untuk kompatibilitas (jika ada route lama)
+        'login'         => \Myth\Auth\Filters\LoginFilter::class,
+        'role'          => \Myth\Auth\Filters\RoleFilter::class,
+        'permission'    => \Myth\Auth\Filters\PermissionFilter::class,
     ];
 
     /**
@@ -44,7 +46,7 @@ class Filters extends BaseConfig
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
-            'cors'
+            'cors',
         ],
         'after' => [
             'toolbar',
@@ -74,6 +76,8 @@ class Filters extends BaseConfig
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
     public array $filters = [
-        // 'login' => ['before' => ['/*']],
+        // Lindungi seluruh aplikasi dengan filter SSO
+        // Route publik (sso-login, sso-callback) dikecualikan via route definition
+        'sso' => ['before' => ['/*']],
     ];
 }
