@@ -76,8 +76,7 @@ class Filters extends BaseConfig
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
     public array $filters = [
-        // Lindungi seluruh aplikasi dengan filter SSO
-        // Route publik (sso-login, sso-callback) dikecualikan via route definition
-        'sso' => ['before' => ['/*']],
+        // Filter SSO diterapkan per-route di Routes.php (bukan global)
+        // agar route publik /sso-login /sso-callback /logout tidak terblokir
     ];
 }
