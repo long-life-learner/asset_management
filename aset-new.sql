@@ -6439,3 +6439,37 @@ ON DUPLICATE KEY UPDATE
 
 COMMIT;
 
+
+
+
+-- --------------------------------------------------------
+-- Struktur Tabel untuk Fitur Stock Opname
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `stock_opname` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `kode_opname` VARCHAR(50) NOT NULL UNIQUE,
+  `tanggal_opname` DATE NOT NULL,
+  `petugas` VARCHAR(100) NOT NULL,
+  `lokasi` VARCHAR(50) NOT NULL DEFAULT 'Semua Lokasi',
+  `total_item` INT(11) NOT NULL DEFAULT 0,
+  `total_selisih` INT(11) NOT NULL DEFAULT 0,
+  `keterangan` TEXT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `stock_opname_detail` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `opname_id` INT(11) NOT NULL,
+  `kodebarang` VARCHAR(50) NOT NULL,
+  `namabarang` TEXT NOT NULL,
+  `unit` VARCHAR(50) NOT NULL DEFAULT 'Pcs',
+  `lokasi` VARCHAR(50) NOT NULL DEFAULT 'W007',
+  `stok_sistem` INT(11) NOT NULL DEFAULT 0,
+  `stok_fisik` INT(11) NOT NULL DEFAULT 0,
+  `selisih` INT(11) NOT NULL DEFAULT 0,
+  `keterangan` TEXT NULL,
+  PRIMARY KEY (`id`),
+  KEY `opname_id` (`opname_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+

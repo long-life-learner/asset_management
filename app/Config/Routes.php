@@ -66,3 +66,11 @@ $routes->resource('MasterAsetAPI', ['filter' => 'sso']);
 $routes->get('/pelaporan', 'Pelaporan::index', ['filter' => 'sso']);
 $routes->get('/pelaporan/transaksi-aset', 'Pelaporan::transaksiAset', ['filter' => 'sso']);
 $routes->patch('/pelaporan/transaksi-aset', 'Pelaporan::dataTable', ['filter' => 'sso']);
+
+// STOCK OPNAME
+$routes->get('/stock-opname', 'StockOpname::index', ['filter' => 'sso']);
+$routes->get('/stock-opname/create', 'StockOpname::create', ['filter' => 'sso']);
+$routes->get('/stock-opname/detail/(:segment)', 'StockOpname::detail/$1', ['filter' => 'sso']);
+$routes->get('/stock-opname/download-template', 'StockOpname::downloadTemplate', ['filter' => 'sso']);
+$routes->post('/stock-opname/import-excel', 'StockOpname::importExcel', ['filter' => 'sso']);
+$routes->post('/stock-opname/save', 'StockOpname::save', ['filter' => 'sso']);

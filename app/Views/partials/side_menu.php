@@ -58,6 +58,13 @@
           </a>
         </li>
 
+        <li class="nav-item">
+          <a href="<?= base_url('/stock-opname'); ?>" class="nav-link <?= strpos(current_url(), 'stock-opname') !== false ? 'active' : '' ?>" style="border-radius: 10px; margin-bottom: 5px;">
+            <i class="nav-icon fas fa-clipboard-check"></i>
+            <p>Stock Opname</p>
+          </a>
+        </li>
+
         <li class="nav-header" style="color: #64748b; font-weight: 700; font-size: 0.7rem; letter-spacing: 1px; padding: 15px 10px 5px;">ANALISIS & DATA</li>
 
         <li class="nav-item">
