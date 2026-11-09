@@ -1,0 +1,283 @@
+NO.,KODE,NAMA BARANG,UNIT,STOK AWAL,MUTASI BARANG,STOK AKHIR,KETERANGAN
+1,K0257,Acrylic panjang 25 x 5 cm ,Buah,14,,14,PMB/SEMINAR
+2,K0285,Acrylic tinggi 21 x 15 cm ,Buah,18,,18,PMB/SEMINAR
+3,K0005,Aerosoldispenser,Buah,2,,2,ADM/OPERASIONAL KANTOR
+4,K0006,"Amplop kop Poltek w. coklat,  F4 berkas ujian ",Pcs,4327,,3203,ADM/OPERASIONAL KANTOR
+5,K0011,Amplop kop Poltek warna coklat uk. F4,Pcs,838,,827,ADM/OPERASIONAL KANTOR
+6,K0008,Amplop kop Poltek warna coklat uk. kecil ,Pcs,385,,385,ADM/OPERASIONAL KANTOR
+7,K0009,Amplop putih kop Poltek ,Pcs,1999,,1886,ADM/OPERASIONAL KANTOR
+8,K0150,Amplop putih polos uk. Besar 110x230mm,Pcs,300,,300,ADM/OPERASIONAL KANTOR
+9,K0199,Amplop putih polos uk. Kecil 95x125mm,Pcs,299,,400,ADM/OPERASIONAL KANTOR
+10,,Amplop warna coklat polos uk. A4,Pcs,33,,38,ADM/OPERASIONAL KANTOR
+11,K0007,Amplop warna coklat polos uk. F4,Pcs,91,,50,ADM/OPERASIONAL KANTOR
+12,K0010,Amplop warna coklat uk. dobel folio polos/A3,Pcs,2,,3,ADM/OPERASIONAL KANTOR
+13,K0126,Baju Almamater Mahasiswa ,Buah,47,,47,MHS/DOSEN
+14,K0045,Baju jas staf Poltek lama,Buah,0,,0,DOSEN/STAF
+15,,Baju Menwa,Buah,25,,5,MHS
+16,K0124,Baju Seragam Mhs 2 stel ,Stel,7,,7,MHS
+17,K0038,Baju Toga Senat Poltek-GT,Buah,15,,15,WISUDA/SENAT
+18,K0039,Baju Toga Wisudawan Poltek GT,Buah,302,,302,WISUDA/MHS.
+19,K0031,Bak stempel,Buah,3,,0,ADM/OPERASIONAL KANTOR
+20,K0018,Balpoint  ,Buah,618,,227,MHS/Adm./Operasional Kantor
+21,K0034,Baret Menwa,Buah,114,,80,PATAKA
+22,K0027,Batu baterai besar (1.5 v),Buah,19,,12,ADM/OPERASIONAL KANTOR
+23,K0284,Batu baterai kalkulator,Buah,3,,14,ADM/OPERASIONAL KANTOR
+24,K0020,Batu baterai kecil (AA)  utk jam dinding,Buah,2,,25,ADM/OPERASIONAL KANTOR
+25,K0021,Batu baterai kecil (AAA) utk remote,Buah,6,,18,ADM/OPERASIONAL KANTOR
+26,K0002,Batu baterai kotak (1.5 v),Buah,19,,0,ADM/OPERASIONAL KANTOR
+27,,Batu Baterai Kotak (9 v),Buah,5,,12,PMB
+28,K0029,Batu baterai sedang (9 v),Buah,15,,0,ADM/OPERASIONAL KANTOR
+29,K0255,Batu baterai stopwatch,Buah,96,,73,PERKULIAHAN/PMB
+30,K0041,Bendera Jurusan Teknik Elektronika ( Logi lama 4 Logo Baru 5),Buah,10,,9,ADM/OPERASIONAL KANTOR
+31,,Bendera jurusan Teknik Informasi (Logo Lama 2 Logo Baru 5 ),Buah,7,,7,PRODI TI
+32,K0042,Bendera Jurusan Teknik Mesin ( Logo Lama : 4 Logo Baru 5),Buah,8,,9,ADM/OPERASIONAL KANTOR
+33,K0043,Bendera Jurusan Teknologi Industri ( Logo Lama 3 Logo Baru 5),Buah,7,,8,ADM/OPERASIONAL KANTOR
+34,K0186,Bendera merah putih uk. Besar (2 x 3),Buah,4,,9,PATAKA
+35,K0033,Bendera merah putih uk. kecil (100 x 120),Buah,4,,8,PATAKA
+36,K0032,Bendera Poltek-GT logo baru ,Buah,4,,6,PATAKA
+37,K0040,Bendera Prospek,Buah,4,,4,PMB
+38,K0014,Binder clip no. 107,Doz (12 pcs),1,,1,ADM/OPERASIONAL KANTOR
+39,K0016,Binder clip no. 111,Doz (12 pcs),5,,4,ADM/OPERASIONAL KANTOR
+40,K0015,Binder clip no. 200,Doz (12 pcs),6,,8,ADM/OPERASIONAL KANTOR
+41,K0017,Binder clip no. 260,Doz (12 pcs),15,,15,ADM/OPERASIONAL KANTOR
+42,K0023,Blangko ijazah Poltek-GT A4,Lembar,691,,556,ADM/OPERASIONAL KANTOR
+43,K0155,Blangko Transkrip nilai Poltek-GT A4,Lembar,374,,573,ADM/OPERASIONAL KANTOR
+44,K0024,Box file,Buah,0,,0,ADM/OPERASIONAL KANTOR
+45,K0135,Braso,Btl,1,,1,DRUM BAND
+46,K0025,Buku ekspedisi,Buah,10,,7,ADM/OPERASIONAL KANTOR
+47,K0019,Buku gambar A3,Pack/Buah,716,,3322,MHS
+48,K0153,Buku saku Mhs,Buah,85,,95,MHS
+49,K0022,Buku tamu,Buah,19,,11,WISUDA
+50,K0030,Buku tulis ,Pack/Buah,8186,,6868,MHS
+51,K0026,Buku tulis  uk. Folio,Buah,2,,4,ADM/OPERASIONAL KANTOR
+52,K0049,Dobel tape ''1,Buah,10,- 1,21,ADM/OPERASIONAL KANTOR
+53,K0048,"Dobel tape ''2,5",Buah,3,,15,ADM/OPERASIONAL KANTOR
+,,Dudukan Solatif,Buah,4,,4,ADM/OPERASIONAL KANTOR
+54,K0184,Dudukan tiang bendera,Buah,0,,0,WISUDA
+55,K0202,Ember hitam,Buah,2,,7,KEBERSIHAN
+56,K0004,Emblem baret (baru),Buah,30,,30,PATAKA
+57,K0050,Emblem baret (lama = 4 ),Buah,39,,39,PATAKA
+58,K0221,Emblem tanda panitia PMB utk pataka (kain),Buah,11,,11,PMB/PATAKA
+59,K0051,File folder personal GT (merah putih),Buah,1963,,1941,ADM/OPERASIONAL KANTOR
+60,K0055,Gagang cutter A - 300 kecil,Buah,0,,0,ADM/OPERASIONAL KANTOR
+61,K0047,Gagang cutter L - 500 besar,Buah,2,,6,ADM/OPERASIONAL KANTOR
+62,K0052,Gantungan penneng ,Pcs,449,,363,ADM/OPERASIONAL KANTOR
+63,K0219,Gayung ,Buah,8,,8,KEBERSIHAN
+64,K0261,Gelas plastik,Buah,56,,31,PMB
+65,K0053,Gunting,Buah,4,,3,ADM/OPERASIONAL KANTOR
+66,K0046,Isi cutter L - 100 kecil,Pcs,821,,250,ADM/OPERASIONAL KANTOR
+67,K0056,Isi cutter L - 500 besar,Pcs,47,,39,ADM/OPERASIONAL KANTOR
+68,K0057,Isi staples no. 10 - 1 M kecil,Doz,31,,58,ADM/OPERASIONAL KANTOR
+69,K0058,Isi staples no. 3 - 1 M besar,Doz,131,,175,ADM/OPERASIONAL KANTOR
+70,K0059,Isolatip 1'',Buah,16,- 2,22,ADM/OPERASIONAL KANTOR
+71,K0060,Isolatip 1/2'',Buah,11,,10,ADM/OPERASIONAL KANTOR
+72,K0061,Jangka ,Buah,23,,26,ADM/OPERASIONAL KANTOR
+73,K0222,Kain pel refil lantai,Buah,4,,7,KEBERSIHAN
+74,,Kalkulator,Buah,2,,2,PMB
+75,K0063,Kantong plastik PE putih susu ,Kg/Pcs,20 (@370 pcs),,20 (@370 pcs),PMB/WISUDA
+76,K0243,Kantong plastik sampah,Pack/Pcs,30,,105,KEBERSIHAN
+77,K0223,Kardus polos,Buah,40,,40,PMB/WISUDA
+78,K0204,Kemoceng,Buah,2,,2,KEBERSIHAN
+79,K0259,Kerah sekretaris Senat Poltek,Buah,4,,4,WISUDA/SENAT
+80,K0205,Kerah Senat Jurusan Teknik Elektronika,Buah,3,,3,WISUDA/SENAT
+81,K0206,Kerah Senat Jurusan Teknik Mesin,Buah,3,,3,WISUDA/SENAT
+82,K0207,Kerah Senat Jurusan Teknologi Industri,Buah,3,,3,WISUDA/SENAT
+83,K0003,Kerah Senat Poltek,Buah,10,,10,WISUDA/SENAT
+84,K0208,Kerah Wisudawan Teknik Elektronika,Buah,204,,204,WISUDA/MHS.
+85,K0209,Kerah Wisudawan Teknik Mesin,Buah,255,,255,WISUDA/MHS.
+86,K0066,Kerah Wisudawan Teknologi Industri,Buah,30,,30,WISUDA/MHS.
+87,K0067,Kertas buram w. Hijau,Rim (100),200,,22,ADM/OPERASIONAL KANTOR
+88,K0068,Kertas buram w. Biru,Rim (100),200,,14,ADM/OPERASIONAL KANTOR
+89,K0069,Kertas buram w. Kuning,Rim (100),200,,13,ADM/OPERASIONAL KANTOR
+90,K0070,Kertas buram w. Merah,Rim (100),200,,20,ADM/OPERASIONAL KANTOR
+91,K0071,Kertas buram w. Putih ,Rim (100),200,,10,ADM/OPERASIONAL KANTOR
+,,Kertas buram w. Coklat,Rim (100),200,,15,ADM/OPERASIONAL KANTOR
+92,K0074,Kertas buram w. Merah Muda,Rim (100),200,,26,ADM/OPERASIONAL KANTOR
+,,Kertas folio Polos,Rim,30,,30,
+93,K0072,Kertas dobel folio bergaris,Rim,201,,116,PERKULIAHAN
+94,K0075,"Kertas foto ""Glossy""",Lembar,190,- 4,200,ADM/OPERASIONAL KANTOR
+95,K0076,Kertas foto copy A4 70 gsm,Rim/Lbr,28,- 2,53,ADM/OPERASIONAL KANTOR
+96,K0077,Kertas foto copy d. folio,Rim/Lbr,1/444,,1/444,ADM/OPERASIONAL KANTOR
+97,K0078,Kertas foto copy F4 70 gsm,Rim/Lbr,8,,35,ADM/OPERASIONAL KANTOR
+98,K0079,Kertas karbon,Rim/Lbr,1,,2,ADM/OPERASIONAL KANTOR
+99,K0080,Kertas koncorde A4 warna biru,Rim/Lbr,2/1000,,3/1500,ADM/OPERASIONAL KANTOR
+100,K0081,Kertas koncorde A4 warna biru laut,Rim/Lbr,2/969,,2/1000,ADM/OPERASIONAL KANTOR
+101,K0082,Kertas koncorde A4 warna coklat,Rim/Lbr,2/1000,,2/1000,ADM/OPERASIONAL KANTOR
+102,K0084,Kertas koncorde A4 warna krem,Rim/Lbr,2/1000,,2/1000,ADM/OPERASIONAL KANTOR
+103,K0085,Kertas koncorde A4 warna kuning,Rim/Lbr,2/1021,,3/1500,ADM/OPERASIONAL KANTOR
+105,K0083,Kertas koncorde A4 warna merah muda,Rim/Lbr,2/1000,,2/1000,ADM/OPERASIONAL KANTOR
+106,K0087,Kertas koncorde A4 warna perak,Rim/Lbr,2/1000,,2/1000,ADM/OPERASIONAL KANTOR
+107,K0088,Kertas koncorde A4 warna ungu,Rim/Lbr,1/500,,1/500,ADM/OPERASIONAL KANTOR
+108,K0089,"Kertas kop Poltek  jurusan Teknik Elektro, F4",Rim (500 lbr),2,,3,KAJUR TE/DOSEN
+109,K0094,"Kertas kop Poltek jurusan Teknik Elektro, A4",Rim (500 lbr),1,,2,KAJUR TE/DOSEN
+110,K0262,"Kertas kop Poltek jurusan Teknik Mesin, A4",Rim (500 lbr),0,,3,KAJUR TM/DOSEN
+111,K0263,"Kertas kop Poltek jurusan Teknik Mesin, F4",Rim (500 lbr),2,,2,KAJUR TM/DOSEN
+112,K0264,"Kertas kop Poltek jurusan Teknologi Industri, A4",Rim (500 lbr),2,,23,KAJUR TI/DOSEN
+113,K0265,"Kertas kop Poltek jurusan Teknologi Industri, F4",Rim (500 lbr),3,,0,KAJUR TI/DOSEN
+114,K0090,Kertas kop Poltek-GT baru A4,Rim/Lbr,15/13000,,21/,ADM/OPERASIONAL KANTOR
+115,K0210,Kertas kop Poltek-GT baru F4,Rim/Lbr,17/15500,,5/,ADM/OPERASIONAL KANTOR
+116,K0277,Kertas lembar ujian PMB,Sheet,500,,500,PMB
+117,K0065,Kertas manila putih,Rim (100),1 roll,,1 roll,PMB/WISUDA
+118,K0196,Keset karet,Buah,1,,1,KEBERSIHAN
+119,,Label T & J no. 104,Pack/Pcs,0,,19,PMB/WISUDA
+120,,Label T & J no. 105,Pack/Pcs,0,,0,PMB/WISUDA
+121,,Label T & J no. 120,Pack/Pcs,31,,22,PMB/WISUDA
+122,K0201,Label T & J no. 121,Pack/Pcs,30,,51,PMB/WISUDA
+123,K0101,Laqban kain/plastik warna kuning,Buah,26,- 1,14,ADM/OPERASIONAL KANTOR
+124,,Laqban kertas,Buah,14,- 1,12,ADM/OPERASIONAL KANTOR
+125,K0102,Laqban plastik bening/coklat,Buah,22,,24,ADM/OPERASIONAL KANTOR
+126,K0227,Layar infocus stand,Buah,4,,4,SEMINAR/KULIAH
+127,K0228,Layar infocus utk. tembok,Buah,2,,2,SEMINAR/KULIAH
+128,K0103,Lem aica-Aibon 601,Kg,0,,0,RUMAH TANGGA
+129,K0104,Lem indrakol/FOX,Botol,0,,0,ADM/OPERASIONAL KANTOR
+130,K0105,Lem kertas stick 'UHU' 21 grm,Buah,2,,20,ADM/OPERASIONAL KANTOR
+131,K0164,Lem stereoform,Botol,4,,4,PMB/WISUDA
+132,K0107,Letter file uk. Pendek (PVC Ordner FC),Buah,3,,0,ADM/OPERASIONAL KANTOR
+133,K0108,Letter file uk. Tinggi (PVC Ordner FC),Buah,24,,5,ADM/OPERASIONAL KANTOR
+134,K0109,Map gantung (Filing folder no. 100),Buah,100,,100,ADM/OPERASIONAL KANTOR
+135,K0230,Map plastik transparan uk. A4 (putih),Sheet,61,,102,ADM/OPERASIONAL KANTOR
+136,K0231,Map plastik transparan uk. F4 (putih),Sheet,67,,125,ADM/OPERASIONAL KANTOR
+137,,Map plastik warna merah (busines file) F4,Buah,239,,121,ADM/OPERASIONAL KANTOR
+138,K0253,Map plastik warna biru (busines file) A4,Buah,29,,32,ADM/OPERASIONAL KANTOR
+139,,Map plastik warna biru (busines file) F4,Buah,83,,108,ADM/OPERASIONAL KANTOR
+140,K0286,Masker dr Kemendikbud,Pcs,243,,243,Sumbangan 
+141,K0287,Masker dr pak Ari,Pcs,1,,1,MHS
+142,K0125,Masker dr Yayasan,Pcs,2,,2,MHS
+143,K0146,Masker Hoda Kaesen,y211,5 (19 pcs) (@50,,5 (19 pcs) (@50,PMB 2021
+144,,Masker kain abu-abu,Pcs,100,,100,Sumbangan 
+145,,Matras utk Samapta,Buah,20,,20,PMB
+146,K0256,Mega phone,Buah,2,,2,PMB/WISUDA
+147,K0234,Mendali Senat Poltek GT,Buah,10,,10,WISUDA/SENAT
+148,K0235,Mendali Wisudawan Poltek-GT,Buah,307,,307,WISUDA/MHS.
+149,K0110,Millimeter block,Buah,260,,260,PERKULIAHAN
+150,,Nampan kayu,Buah,2,,2,PMB/WISUDA
+151,K0236,Nampan plastik,Buah,2,,2,PMB/WISUDA
+152,K0238,Palu sidang Senat wisuda,Unit,1,,1,PMB/WISUDA
+153,K0111,Pangkat ,Psng,146,,437,MHS
+154,K0239,Papan jalan,Buah,120,,140,PMB
+155,K0240,Papan tulis,Buah,0,,0,PERKULIAHAN
+156,,Paper fastener,Pcs,250,,350,ADM/OPERASIONAL KANTOR
+157,K0214,Pedal senat wisuda Poltek GT,Buah,1,,1,WISUDA
+158,K0114,Pelobang kertas besar no. 85,Buah,0,,1,ADM/OPERASIONAL KANTOR
+159,K0115,Pencil 2B,Buah,6397,,5016,MHS/PMB
+161,,Peneng mahasiswa id card,Buah,350,,320,MHS
+162,K0119,Penggaris baja '30 cm,Buah,43,,43,MHS/PMB
+164,K0120,Penggaris busur,Buah,759,,1202,MHS
+165,K0121,Penggaris plastik '30 cm,Buah,1740,,1578,MHS
+166,K0122,Penghapus pencil,Buah,83,,340,MHS/PMB
+167,K0123,Penghapus whiteboard,Buah,81,,86,PERKULIAHAN
+168,K0241,Pengki,Buah,2,,3,KEBERSIHAN
+169,K0267,Penutup alat drum band Bass,Buah,1,,1,DRUM BAND
+170,K0266,Penutup alat drum band Belira,Buah,4,,4,DRUM BAND
+171,K0270,Penutup alat drum band Snare drum bass,Buah,9,,9,DRUM BAND
+172,K0271,Penutup alat drum band Tenor,Buah,9,,9,DRUM BAND
+173,K0269,Penutup alat drum band Trombon,Buah,9,,11,DRUM BAND
+174,K0268,Penutup alat drum band Trompet,Buah,9,,9,DRUM BAND
+175,K0195,Plakat kenang-kenangan Poltek (5 tanpa tempat),Buah,7,,7,SEMINAR/KULIAH UMUM
+176,K0242,Plakat ucapan trima kasih GT,Buah,0,,0,SEMINAR/KULIAH UMUM
+177,K0247,Plakat ucapan trima kasih Poltek,Buah,14,,14,SEMINAR/KULIAH UMUM
+178,K0127,Plastik laminating  F4,Sheet,144,,64,PERKULIAHAN
+179,K0137,Plastik laminating  id card,Sheet,900,,900,MHS
+180,K0251,Plastik PP pockets A4 clear,Sheet,130,,110,ADM/OPERASIONAL KANTOR
+181,K0113,Plastik PVC utk sampul buku,Roll,0,,0,PERPUSTAKAAN
+182,K0128,Plastik transparasi film yashica,Sheet,128,,320,ADM/OPERASIONAL KANTOR
+,,Pluit Merah,Buah,108,,108,PMB
+183,K0198,Pluit Putih,Buah,110,,110,PMB
+184,K0129,Pompa air galon,Buah,7,,7,PMB
+185,K0130,Pos it (stick on notes),Pack,14,,12,ADM/OPERASIONAL KANTOR
+186,K0136,Sabuk Pataka (kopel ring),Buah,15,,30,PATAKA
+187,K0245,Sapu karet lantai air,Buah,23,,1,KEBERSIHAN
+188,K0246,Sapu lantai,Buah,22,,19,KEBERSIHAN
+189,K0217,Sapu lidi,Buah,9,,8,KEBERSIHAN
+190,K0180,Sarung tangan pataka,Pasang,24,,60,PATAKA
+191,K0176,Selendang cumlaude wisuda,Buah,33,,17,WISUDA
+192,K0182,Selongsong wisuda,Buah,301,,301,WISUDA/MHS.
+193,K0131,Sepatu PDH ,Pasang,109,,79,MHS
+194,K0062,Sepatu sefty ,Pasang,58,,75,MHS
+195,,Sharpener (serutan pencil) Joyko A-5,Buah,2,,2,PMB/ADM
+196,K0215,Sikat lantai gagang panjang,Buah,1,,0,KEBERSIHAN
+197,K0216,Sikat WC ,Buah,2,,2,KEBERSIHAN
+198,K0211,Spidol kecil warna biru,Buah,10,,32,PMB/ADM
+199,,Spidol Kecil Warna Hijau,Buah,2,,2,PMB
+200,K0133,Spidol kecil warna hitam,Buah,252,,136,PMB/ADM
+201,K0134,Spidol kecil warna merah,Buah,14,,24,PMB/ADM
+202,K0001,Spidol permanent' 70 warna hitam,Buah,10,,10,PERKULIAHAN
+203,K0106,Spidol whiteboard besar warna biru,Buah,2,,4,SEMINAR/KULIAH UMUM
+204,K0248,Spidol whiteboard besar warna hitam,Buah,2,,2,SEMINAR/KULIAH UMUM
+205,K0249,Spidol whiteboard besar warna merah,Buah,2,,2,SEMINAR/KULIAH UMUM
+206,K0138,Spidol whiteboard warna biru,Buah,4,,5,PERKULIAHAN
+207,K0139,Spidol whiteboard warna hitam,Buah,9,,15,PERKULIAHAN
+208,K0140,Spidol whiteboard warna merah,Buah,27,,189,PERKULIAHAN
+209,K0143,Spiral plastik utk. Jilid uk. 1/2'',Buah,1,,1,JILID
+210,,Spiral plastik utk. Jilid uk. 1/8'',Buah,2,,2,JILID
+211,,Spiral plastik utk. Jilid uk. 5/16'',Buah,3,,3,JILID
+212,K0281,Spiral plastik utk. Jilid uk. A4 3/8'' 10 mm,Box/Buah,2/200,,2/200,JILID
+213,K0141,"Spiral plastik utk. Jilid uk. A4, 1 1/4'' 32 mm",Box/Buah,2/100,,2/100,JILID
+214,,"Spiral plastik utk. Jilid uk. A4, 1/4'' 6 mm",Box/Buah,2/100,,2/100,JILID
+215,K0142,"Spiral plastik utk. Jilid uk. A4, 5/8'' 16 mm",Box/Buah,2/198,,2/198,JILID
+216,K0279,"Spiral plastik utk. Jilid uk. F4, 1/4'' 6 mm",Box/Buah,2/198,,2/198,JILID
+217,K0281,"Spiral plastik utk. Jilid uk. F4, 3/8'' 10 mm",Box/Buah,2/200,,2/200,JILID
+218,,"Spiral plastik utk. Jilid uk. F4, 5/8'' 16 mm",Box/Buah,2/200,,2/200,JILID
+219,K0282,"Spiral plastik utk. Jilid uk. F4, 50 mm''",Box/Buah,2/100,,2/100,JILID
+220,K0145,"Spiral plastik utk. Jilid uk. F4, 51 mm''",Box/Buah,2/100,,2/100,JILID
+221,K0151,Staples HD - 10 Kecil,Buah,1,,6,ADM/OPERASIONAL KANTOR
+222,K0152,Staples HD - 50 sedang,Buah,9,,4,ADM/OPERASIONAL KANTOR
+223,K0154,Steroform kecil,Lembar,0,,0,PMB/WISUDA
+,,Stabillo Highligter,Buah,10,,10,ADM/OPERASIONAL KANTOR
+224,K0156,Stopmap folio warna biru,Lembar,1200,,900,PMB/WISUDA
+225,K0157,Stopmap folio warna hijau,Lembar,350,,350,PMB/WISUDA
+226,K0158,Stopmap folio warna kuning,Lembar,0,,0,PMB/WISUDA
+227,K0159,Stopmap folio warna merah,Lembar,1100,,749,PMB/WISUDA
+228,K0229,"Stopmap kop Poltek warna abu-abu, F4",Lembar,594,,422,ADM/OPERASIONAL KANTOR
+229,K0232,Stopmap motif batik (baru),Lembar,34,,34,PMB/WISUDA
+230,K0233,Stopmap motif bludru (lama),Lembar,13,,13,PMB/WISUDA
+231,K0250,Stopwatch,Buah,15,,7,PERKULIAHAN/PMB
+232,K0194,Syal Pataka merah putih,Buah,92,,131,PATAKA
+233,K0274,Tali kur warna merah,Buah,42,,77,PATAKA
+234,K0187,Tali kur warna putih,Buah,32,,76,PATAKA
+235,K0252,Tali penneng untuk PMB,Buah,480,,480,PMB
+236,K0254,Tali plastik rafia,Roll,2.5,,1,PMB/WISUDA
+237,K0064,Tali tambang bendera Merah Putih ,Mtr,80,,80,PATAKA
+238,K0212,Tali tambang plastik,Meter (@15 m),8,,8,WISUDA
+239,K0220,Taplak meja batik,Buah,16,,16,R. TANGGA/SEMINAR
+240,K0218,Taplak meja oval,Buah,7,,7,R. TANGGA/SEMINAR
+241,K0213,Taplak nampan,Buah,1,,1,WISUDA
+242,,Tempat peneng mahasiswa id card,Buah,150,,373,MHS
+243,,Tiang bendera,Buah,0,,0,WISUDA
+244,K0147,Tinta printer Canon w. cyan,Buah,9,,6,ADM/OPERASIONAL KANTOR
+245,K0148,Tinta printer Canon w. hitam,Buah,10,,3,ADM/OPERASIONAL KANTOR
+246,K0149,Tinta printer Canon w. magenta,Buah,9,,6,ADM/OPERASIONAL KANTOR
+247,K0283,Tinta printer Canon w. yellow,Buah,9,,6,ADM/OPERASIONAL KANTOR
+,,Tinta printer cartridge Canon ,Buah,2,,2,
+248,K0073,Tinta printer cartridge HP Laserjet,Botol,5,,6,ADM/OPERASIONAL KANTOR
+249,K0161,Tinta printer Epson cyan ,Buah,4,,6,ADM/OPERASIONAL KANTOR
+250,K0054,Tinta printer Epson magenta,Buah,2,,6,ADM/OPERASIONAL KANTOR
+251,K0275,Tinta printer epson w. hitam,Pcs,1,,4,ADM/OPERASIONAL KANTOR
+252,K0117,Tinta printer epson w. kuning,Pcs,4,,6,ADM/OPERASIONAL KANTOR
+253,K0165,Tinta refill warna biru,Btl/Baru,51,,49,PERKULIAHAN
+254,K0166,Tinta refill warna hitam,Btl/Baru,2,,0,PERKULIAHAN
+255,K0167,Tinta refill warna merah,Btl/Baru,17,,119,PERKULIAHAN
+256,K0168,Tinta stempel warna biru,Botol,26,,21,ADM/OPERASIONAL KANTOR
+257,K0169,Tinta stempel warna hitam,Botol,7,,1,ADM/OPERASIONAL KANTOR
+258,K0170,Tinta stempel warna merah,Botol,2,,7,ADM/OPERASIONAL KANTOR
+259,K0171,Tip-ex ,Buah,487,,180,MHS/ADM.
+260,K0172,Toner foto copy Sharp MX312 AT,Botol,2,,2,ADM/OPERASIONAL KANTOR
+261,K0028,Tongkat senat wisuda Poltek-GT,Buah,1,,1,WISUDA/SENAT
+262,K0173,Topi PGT,Buah,316,,311,MHS
+263,K0203,Topi senat wisuda Poltek-GT,Buah,15,,15,WISUDA/SENAT
+264,K0200,Topi Wisudawan Poltek-GT,Buah,306,,306,WISUDA/MHS.
+265,K0044,Trigonal clips no. 3,Doz,12,,12,ADM/OPERASIONAL KANTOR
+266,,USB flash disk KMI,Buah,149, -1; -20,149,MHS/ADM.
+267,,USB flash disk Kioxia,Buah,96,,96,MHS/ADM.
+268,,USB flash disk Lexar,Buah,142,,142,MHS/ADM.
+269,K0112,USB flash disk 1 T,Buah,0,,0,MHS/ADM.
+270,K0162,"Wearpack Dosen Teknik Elektronika (M=3, L= 2, XL= 2)",Steel,7,,6,DOSEN
+271,K0163,"Wearpack Dosen Teknologi Industri (M= 0, L= 1, XL= 1)",Steel,7,,2,DOSEN
+272,,Wearpack Dosen Teknologi Informasi ( L= 5 XL=2 ),Steel,1,,7,DOSEN
+273,K0272,"Wearpack Dosen Teknik Mesin (M= 6, L= 5, XL= 1)",Steel,20,,12,DOSEN
+274,K0098,"Wearpack Mahasiswa Teknik Elektronika (M= 16, L= 4, S=1)",Steel,21,,21,PERKULIAHAN
+275,K0144,"Wearpack Mahasiswa Teknologi Industri (S= 1, M= 13, L= 4)",Steel,18,,18,PERKULIAHAN
+276,K0160,"Wearpack Mahasiswa Teknik Mesin (M= 10, L= 29, S= 3)",Steel,55,,42,PERKULIAHAN
+277,,"Wearpack Mahasiswa Teknologi Informasi ( M= 0, L= 0, XL= 0 )",Steel,0,,0,PERKULIAHAN
+278,K0192,Wings Pataka Poltek,Buah,45,,45,PATAKA
+
