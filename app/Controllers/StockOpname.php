@@ -357,6 +357,16 @@ class StockOpname extends BaseController
         $db->transBegin();
 
         try {
+            // Selaraskan collation agar tidak terjadi error mix of collations
+            try {
+                $db->query("ALTER TABLE `barangbergerak` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+                $db->query("ALTER TABLE `masterbarang` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+            } catch (\Throwable $ignored) {
+                try {
+                    $db->query("SET NAMES 'latin1' COLLATE 'latin1_swedish_ci'");
+                } catch (\Throwable $ignored2) {}
+            }
+
             $totalItem = count($items);
             $totalSelisih = 0;
 

@@ -1,10 +1,9 @@
 -- ========================================================
--- UPDATE DATA ASET BERGERAK BERDASARKAN NAMA BARANG
--- Total Item Diproses: 282 barang
--- Di-update berdasarkan Nama: 158 item
--- Ditambahkan sebagai Barang Baru: 123 item
--- Tanggal Eksekusi: 2026-11-09
+-- SELARASKAN COLLATION AGAR TIDAK TERJADI ILLEGAL MIX OF COLLATIONS
 -- ========================================================
+SET NAMES utf8mb4;
+ALTER TABLE `barangbergerak` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+ALTER TABLE `masterbarang` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 START TRANSACTION;
 

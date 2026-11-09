@@ -33,6 +33,19 @@ class ExcelImporter extends BaseController
         $db = \Config\Database::connect();
 
         try {
+            // 1. Atasi masalah "Illegal mix of collations":
+            // Ubah character set tabel menjadi utf8mb4 atau selaraskan connection collation
+            try {
+                $db->query("ALTER TABLE `barangbergerak` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+                $db->query("ALTER TABLE `masterbarang` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+            } catch (\Throwable $ignored) {
+                // Jika user database tidak memiliki hak ALTER TABLE, gunakan SET NAMES latin1
+                try {
+                    $db->query("SET NAMES 'latin1' COLLATE 'latin1_swedish_ci'");
+                } catch (\Throwable $ignored2) {}
+            }
+
+            // 2. Parse kueri SQL
             $lines = explode("\n", $sqlContent);
             $statements = [];
             $current = '';
@@ -50,14 +63,48 @@ class ExcelImporter extends BaseController
             }
 
             $executed = 0;
+            $errors = [];
+
             foreach ($statements as $stmt) {
                 if (empty($stmt)) continue;
-                $db->query($stmt);
-                $executed++;
+
+                // Jangan ulangi START TRANSACTION atau COMMIT jika dieksekusi per baris
+                if (strtoupper($stmt) === 'START TRANSACTION;' || strtoupper($stmt) === 'COMMIT;') {
+                    continue;
+                }
+
+                try {
+                    $db->query($stmt);
+                    $executed++;
+                } catch (\Throwable $stmtErr) {
+                    // Jika error collation terjadi pada statement tertentu, coba eksekusi dengan CAST/CONVERT
+                    $errMsg = $stmtErr->getMessage();
+                    if (strpos($errMsg, 'Illegal mix of collations') !== false) {
+                        try {
+                            // Eksekusi fallback dengan setting latin1 khusus statement ini
+                            $db->query("SET NAMES 'latin1'");
+                            $db->query($stmt);
+                            $executed++;
+                            continue;
+                        } catch (\Throwable $fallbackErr) {
+                            $errors[] = $fallbackErr->getMessage();
+                        }
+                    } else {
+                        $errors[] = $errMsg;
+                    }
+                }
             }
 
             $totMaster = $db->table('masterbarang')->where('jenis_aset', 'Aset Bergerak')->countAllResults();
             $totBergerak = $db->table('barangbergerak')->countAllResults();
+
+            $errorHtml = '';
+            if (!empty($errors)) {
+                $uniqueErrors = array_slice(array_unique($errors), 0, 5);
+                $errorHtml = "<div class='alert alert-warning' style='background:#fef3c7; color:#92400e; padding:12px; border-radius:6px; margin-top:15px; font-size:13px;'>
+                    <strong>Catatan (" . count($errors) . " query dilewati):</strong><br>" . implode("<br>", array_map('htmlspecialchars', $uniqueErrors)) . "
+                </div>";
+            }
 
             $html = "
             <div style='font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 600px; margin: 40px auto; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);'>
@@ -65,11 +112,12 @@ class ExcelImporter extends BaseController
                 <p>Data inventaris telah disinkronkan ke database <strong>" . htmlspecialchars($db->getDatabase()) . "</strong> menggunakan pencocokan nama barang.</p>
                 <div style='background: #f8fafc; padding: 15px 20px; border-radius: 8px; margin: 20px 0;'>
                     <ul style='margin: 0; padding-left: 20px;'>
-                        <li>Total kueri dieksekusi: <strong>$executed statement</strong></li>
+                        <li>Total kueri berhasil dieksekusi: <strong>$executed statement</strong></li>
                         <li>Total data di <code>barangbergerak</code>: <strong>$totBergerak</strong></li>
                         <li>Total Aset Bergerak di <code>masterbarang</code>: <strong>$totMaster</strong></li>
                     </ul>
                 </div>
+                $errorHtml
                 <p><a href='" . base_url('/') . "' style='display:inline-block; padding:10px 24px; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600;'>Kembali ke Dashboard</a></p>
             </div>
             ";

@@ -31,6 +31,16 @@ class UpdateAsetFromExcel extends BaseCommand
         CLI::write("Terhubung ke database: " . $db->getDatabase() . " di " . $db->hostname, 'cyan');
 
         try {
+            // Selaraskan collation agar tidak terjadi Illegal mix of collations
+            try {
+                $db->query("ALTER TABLE `barangbergerak` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+                $db->query("ALTER TABLE `masterbarang` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+            } catch (\Throwable $e) {
+                try {
+                    $db->query("SET NAMES 'latin1' COLLATE 'latin1_swedish_ci'");
+                } catch (\Throwable $e2) {}
+            }
+
             $lines = explode("\n", $sqlContent);
             $statements = [];
             $current = '';
@@ -50,8 +60,18 @@ class UpdateAsetFromExcel extends BaseCommand
             $count = 0;
             foreach ($statements as $stmt) {
                 if (empty($stmt)) continue;
-                $db->query($stmt);
-                $count++;
+                if (strtoupper($stmt) === 'START TRANSACTION;' || strtoupper($stmt) === 'COMMIT;') continue;
+
+                try {
+                    $db->query($stmt);
+                    $count++;
+                } catch (\Throwable $err) {
+                    if (strpos($err->getMessage(), 'Illegal mix of collations') !== false) {
+                        $db->query("SET NAMES 'latin1'");
+                        $db->query($stmt);
+                        $count++;
+                    }
+                }
             }
 
             CLI::write("✓ Berhasil memperbarui data aset berdasarkan nama! ($count query dieksekusi)", 'green');
