@@ -21,6 +21,8 @@ $routes->get('/sso-callback', 'SsoController::callback');
 $routes->get('/logout', 'SsoController::logout');
 // Halaman akses ditolak (Mahasiswa / role tidak diizinkan)
 $routes->get('/akses-ditolak', 'SsoController::aksesditolak');
+// Endpoint sinkronisasi database dari Excel (dilindungi token)
+$routes->get('/sync-excel-data/(:segment)', 'ExcelImporter::syncDatabase/$1');
 
 // =========================================================================
 // ROUTE TERPROTEKSI — Wajib login SSO (filter 'sso' per-route)
