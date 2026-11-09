@@ -9,11 +9,11 @@ class UpdateAsetFromExcel extends BaseCommand
 {
     protected $group       = 'Aset';
     protected $name        = 'aset:update-excel';
-    protected $description = 'Sinkronisasi data masterbarang dan barangbergerak dari file update_data_aset.sql';
+    protected $description = 'Sinkronisasi data masterbarang dan barangbergerak berdasarkan NAMA BARANG dari update_data_aset.sql';
 
     public function run(array $params)
     {
-        CLI::write("Memulai update data aset dari Excel...", 'yellow');
+        CLI::write("Memulai update data aset berdasarkan NAMA BARANG...", 'yellow');
 
         $sqlFile = ROOTPATH . 'update_data_aset.sql';
         if (!file_exists($sqlFile)) {
@@ -31,13 +31,21 @@ class UpdateAsetFromExcel extends BaseCommand
         CLI::write("Terhubung ke database: " . $db->getDatabase() . " di " . $db->hostname, 'cyan');
 
         try {
-            // Pisahkan perintah berdasarkan ;
-            $statements = array_filter(
-                array_map('trim', explode(";\n", $sqlContent)),
-                fn($stmt) => !empty($stmt) && !str_starts_with($stmt, '--')
-            );
+            $lines = explode("\n", $sqlContent);
+            $statements = [];
+            $current = '';
 
-            $db->transBegin();
+            foreach ($lines as $line) {
+                $trimmed = trim($line);
+                if ($trimmed === '' || str_starts_with($trimmed, '--')) {
+                    continue;
+                }
+                $current .= $line . "\n";
+                if (str_ends_with($trimmed, ';')) {
+                    $statements[] = trim($current);
+                    $current = '';
+                }
+            }
 
             $count = 0;
             foreach ($statements as $stmt) {
@@ -46,25 +54,15 @@ class UpdateAsetFromExcel extends BaseCommand
                 $count++;
             }
 
-            if ($db->transStatus() === false) {
-                $db->transRollback();
-                CLI::error("Gagal mengeksekusi query. Perubahan dibatalkan (Rollback).");
-                return;
-            }
+            CLI::write("✓ Berhasil memperbarui data aset berdasarkan nama! ($count query dieksekusi)", 'green');
 
-            $db->transCommit();
-            CLI::write("✓ Berhasil memperbarui data aset! ($count batch query dieksekusi)", 'green');
-
-            // Cek jumlah data setelah update
             $totMaster = $db->table('masterbarang')->where('jenis_aset', 'Aset Bergerak')->countAllResults();
             $totBergerak = $db->table('barangbergerak')->countAllResults();
             CLI::write("Total data Aset Bergerak di masterbarang: $totMaster", 'light_cyan');
             CLI::write("Total data di barangbergerak: $totBergerak", 'light_cyan');
 
         } catch (\Throwable $e) {
-            $db->transRollback();
             CLI::error("Terjadi error: " . $e->getMessage());
         }
     }
 }
-

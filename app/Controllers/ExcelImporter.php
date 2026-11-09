@@ -14,11 +14,11 @@ class ExcelImporter extends BaseController
 
     /**
      * Endpoint untuk menjalankan sinkronisasi data dari update_data_aset.sql
-     * Bisa diakses melalui browser: /sync-excel-data/pgt-aset-2026
+     * Berbasis NAMA BARANG (bukan kode).
+     * URL: /sync-excel-data/pgt-aset-2026
      */
     public function syncDatabase($token = null)
     {
-        // Proteksi token sederhana agar tidak diakses sembarang orang
         $validToken = 'pgt-aset-2026';
         if ($token !== $validToken) {
             return $this->response->setStatusCode(403)->setBody("<h3>Akses Ditolak: Token tidak valid.</h3>");
@@ -33,12 +33,21 @@ class ExcelImporter extends BaseController
         $db = \Config\Database::connect();
 
         try {
-            $statements = array_filter(
-                array_map('trim', explode(";\n", $sqlContent)),
-                fn($stmt) => !empty($stmt) && !str_starts_with($stmt, '--')
-            );
+            $lines = explode("\n", $sqlContent);
+            $statements = [];
+            $current = '';
 
-            $db->transBegin();
+            foreach ($lines as $line) {
+                $trimmed = trim($line);
+                if ($trimmed === '' || str_starts_with($trimmed, '--')) {
+                    continue;
+                }
+                $current .= $line . "\n";
+                if (str_ends_with($trimmed, ';')) {
+                    $statements[] = trim($current);
+                    $current = '';
+                }
+            }
 
             $executed = 0;
             foreach ($statements as $stmt) {
@@ -47,34 +56,28 @@ class ExcelImporter extends BaseController
                 $executed++;
             }
 
-            if ($db->transStatus() === false) {
-                $db->transRollback();
-                return $this->response->setStatusCode(500)->setBody("<h3>Gagal mengeksekusi query. Transaksi di-rollback.</h3>");
-            }
-
-            $db->transCommit();
-
             $totMaster = $db->table('masterbarang')->where('jenis_aset', 'Aset Bergerak')->countAllResults();
             $totBergerak = $db->table('barangbergerak')->countAllResults();
 
             $html = "
-            <div style='font-family: sans-serif; padding: 30px; line-height: 1.6;'>
-                <h2 style='color: #16a34a;'>✓ Sukses Sinkronisasi Data Aset dari Excel!</h2>
-                <p>Data berhasil diperbarui ke database <strong>" . htmlspecialchars($db->getDatabase()) . "</strong>.</p>
-                <ul>
-                    <li>Jumlah batch query dieksekusi: <strong>$executed</strong></li>
-                    <li>Total data di <code>barangbergerak</code>: <strong>$totBergerak</strong></li>
-                    <li>Total data Aset Bergerak di <code>masterbarang</code>: <strong>$totMaster</strong></li>
-                </ul>
-                <p><a href='" . base_url('/') . "' style='display:inline-block; padding:10px 20px; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px;'>Kembali ke Dashboard</a></p>
+            <div style='font-family: sans-serif; padding: 30px; line-height: 1.6; max-width: 600px; margin: 40px auto; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);'>
+                <h2 style='color: #16a34a; margin-top: 0;'>✓ Sukses Update Aset Berdasarkan Nama!</h2>
+                <p>Data inventaris telah disinkronkan ke database <strong>" . htmlspecialchars($db->getDatabase()) . "</strong> menggunakan pencocokan nama barang.</p>
+                <div style='background: #f8fafc; padding: 15px 20px; border-radius: 8px; margin: 20px 0;'>
+                    <ul style='margin: 0; padding-left: 20px;'>
+                        <li>Total kueri dieksekusi: <strong>$executed statement</strong></li>
+                        <li>Total data di <code>barangbergerak</code>: <strong>$totBergerak</strong></li>
+                        <li>Total Aset Bergerak di <code>masterbarang</code>: <strong>$totMaster</strong></li>
+                    </ul>
+                </div>
+                <p><a href='" . base_url('/') . "' style='display:inline-block; padding:10px 24px; background:#2563eb; color:#fff; text-decoration:none; border-radius:6px; font-weight:600;'>Kembali ke Dashboard</a></p>
             </div>
             ";
 
             return $this->response->setBody($html);
 
         } catch (\Throwable $e) {
-            $db->transRollback();
-            return $this->response->setStatusCode(500)->setBody("<h3>Error: " . htmlspecialchars($e->getMessage()) . "</h3>");
+            return $this->response->setStatusCode(500)->setBody("<h3>Error saat eksekusi: " . htmlspecialchars($e->getMessage()) . "</h3>");
         }
     }
 
