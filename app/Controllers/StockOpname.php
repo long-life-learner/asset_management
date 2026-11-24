@@ -243,7 +243,7 @@ class StockOpname extends BaseController
             $headerRow = 4;
             $headerFound = false;
             for ($r = 1; $r <= min(6, $maxRow); $r++) {
-                $cVal = (string) $sheet->getCell("C{$r}")->getValue();
+                $cVal = $this->cellValue($sheet, "C{$r}");
                 if (stripos($cVal, 'NAMA') !== false || stripos($cVal, 'BARANG') !== false) {
                     $headerRow = $r;
                     $headerFound = true;
@@ -261,20 +261,20 @@ class StockOpname extends BaseController
 
             for ($r = $startRow; $r <= $maxRow; $r++) {
                 // Kolom C adalah Nama Barang
-                $namaVal = (string) $sheet->getCell("C{$r}")->getValue();
-                if (empty(trim($namaVal))) {
+                $namaVal = $this->cellValue($sheet, "C{$r}");
+                if (trim($namaVal) === '') {
                     // Coba cek kolom B jika kolom C kosong (jika format berbeda)
-                    $namaVal = (string) $sheet->getCell("B{$r}")->getValue();
+                    $namaVal = $this->cellValue($sheet, "B{$r}");
                 }
 
                 $namaVal = trim($namaVal);
-                if (empty($namaVal)) continue;
+                if ($namaVal === '') continue;
 
-                $kodeVal   = trim((string) $sheet->getCell("B{$r}")->getValue());
-                $unitVal   = trim((string) $sheet->getCell("E{$r}")->getValue()) ?: 'Pcs';
-                $stokSistem= (int) $sheet->getCell("F{$r}")->getValue();
-                $stokFisik = (int) $sheet->getCell("G{$r}")->getValue();
-                $ketVal    = trim((string) $sheet->getCell("H{$r}")->getValue());
+                $kodeVal   = trim($this->cellValue($sheet, "B{$r}"));
+                $unitVal   = trim($this->cellValue($sheet, "E{$r}")) ?: 'Pcs';
+                $stokSistem = $this->cellInt($sheet, "F{$r}");
+                $stokFisik  = $this->cellInt($sheet, "G{$r}");
+                $ketVal    = trim($this->cellValue($sheet, "H{$r}"));
 
                 // Pencocokan BERDASARKAN NAMA
                 $cleanInput = $this->cleanName($namaVal);
@@ -535,6 +535,71 @@ class StockOpname extends BaseController
         $s = preg_replace('/[\(\)\,\.\-\/\:\_]/', ' ', $s);
         $s = preg_replace('/\s+/', ' ', $s);
         return trim($s);
+    }
+
+    /**
+     * Baca nilai sel Excel sebagai teks.
+     *
+     * PhpSpreadsheet dapat mengembalikan objek RichText (sel dengan format
+     * campuran), RichText/TextField, atau nilai boolean. Meng-cast objek
+     * tersebut langsung ke string/int memicu error "could not be converted
+     * to int". Helper ini menormalkan semua bentuk nilai menjadi string.
+     */
+    private function cellValue($sheet, string $coord): string
+    {
+        $cell  = $sheet->getCell($coord);
+        $value = $cell->getValue();
+
+        // Jika sel berisi rumus, ambil hasil hitungnya (bukan string rumusnya)
+        if ($cell->getDataType() === \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_FORMULA) {
+            try {
+                $value = $cell->getCalculatedValue();
+            } catch (\Throwable $ignored) {
+                // biarkan nilai rumus apa adanya
+            }
+        }
+
+        if ($value instanceof \PhpOffice\PhpSpreadsheet\RichText\RichText) {
+            return $value->getPlainText();
+        }
+
+        if ($value === null) {
+            return '';
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_array($value)) {
+            return '';
+        }
+
+        if (is_object($value)) {
+            if (method_exists($value, 'getPlainText')) {
+                return (string) $value->getPlainText();
+            }
+            if (method_exists($value, '__toString')) {
+                return (string) $value;
+            }
+            return '';
+        }
+
+        return (string) $value;
+    }
+
+    /**
+     * Baca nilai sel Excel sebagai bilangan bulat (stok).
+     */
+    private function cellInt($sheet, string $coord): int
+    {
+        $text = $this->cellValue($sheet, $coord);
+
+        if (preg_match('/-?\d+/', $text, $match)) {
+            return (int) $match[0];
+        }
+
+        return 0;
     }
 }
 
