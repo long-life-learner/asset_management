@@ -58,12 +58,16 @@ class StockOpname extends BaseController
         $db = \Config\Database::connect();
 
         // Ambil semua barang bergerak yang terdaftar
+        // Nama barang diambil dari masterbarang (sumber nama utama), dengan fallback ke barangbergerak
         $query = $db->query("
-            SELECT bb.kodebarang, bb.namabarang, bb.unit, bb.lokasi, bb.ketersediaan,
+            SELECT bb.kodebarang,
+                   COALESCE(NULLIF(TRIM(mb.namabarang), ''), NULLIF(TRIM(bb.namabarang), ''), bb.kodebarang) AS namabarang,
+                   bb.unit, bb.lokasi, bb.ketersediaan,
                    COALESCE(dr.namaruang, bb.lokasi) AS namaruang, bb.keterangan
             FROM barangbergerak bb
+            LEFT JOIN masterbarang mb ON mb.kodebarang = bb.kodebarang
             LEFT JOIN dataruang dr ON bb.lokasi = dr.koderuang
-            ORDER BY bb.namabarang ASC
+            ORDER BY namabarang ASC
         ");
 
         $data['title']       = 'Sesi Stock Opname Baru';
@@ -87,11 +91,14 @@ class StockOpname extends BaseController
     {
         $db = \Config\Database::connect();
         $query = $db->query("
-            SELECT bb.kodebarang, bb.namabarang, bb.unit, bb.lokasi, bb.ketersediaan,
+            SELECT bb.kodebarang,
+                   COALESCE(NULLIF(TRIM(mb.namabarang), ''), NULLIF(TRIM(bb.namabarang), ''), bb.kodebarang) AS namabarang,
+                   bb.unit, bb.lokasi, bb.ketersediaan,
                    COALESCE(dr.namaruang, bb.lokasi) AS namaruang, bb.keterangan
             FROM barangbergerak bb
+            LEFT JOIN masterbarang mb ON mb.kodebarang = bb.kodebarang
             LEFT JOIN dataruang dr ON bb.lokasi = dr.koderuang
-            ORDER BY bb.namabarang ASC
+            ORDER BY namabarang ASC
         ");
         $items = $query->getResultArray();
 
@@ -217,7 +224,13 @@ class StockOpname extends BaseController
 
             // 1. Ambil seluruh data barang database saat ini untuk pencocokan berbasis nama
             $db = \Config\Database::connect();
-            $dbItems = $db->query("SELECT kodebarang, namabarang, unit, lokasi, ketersediaan FROM barangbergerak")->getResultArray();
+            $dbItems = $db->query("
+                SELECT bb.kodebarang,
+                       COALESCE(NULLIF(TRIM(mb.namabarang), ''), NULLIF(TRIM(bb.namabarang), ''), bb.kodebarang) AS namabarang,
+                       bb.unit, bb.lokasi, bb.ketersediaan
+                FROM barangbergerak bb
+                LEFT JOIN masterbarang mb ON mb.kodebarang = bb.kodebarang
+            ")->getResultArray();
 
             // Normalisasi daftar nama barang di database
             $dbMap = [];

@@ -90,18 +90,6 @@ Master Aset - CRUD
         </div>
     </div>
 
-    <!-- Filter Section -->
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <div class="input-group">
-                <input type="text" class="form-control" id="searchInput" placeholder="Cari kode, nama, atau merk...">
-                <div class="input-group-append">
-                    <span class="input-group-text"><i class="fas fa-search"></i></span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Table Card -->
     <div class="card border-0 shadow-sm" style="border-radius: 10px;">
         <div class="card-header card-header-custom">
@@ -142,8 +130,15 @@ Master Aset - CRUD
                 <div class="modal-body p-4">
                     <div class="form-group">
                         <label class="form-label">Kode Aset *</label>
-                        <input type="text" class="form-control form-control-lg" id="kodebarang" name="kodebarang" placeholder="Contoh: AC001" required>
-                        <small class="form-text text-muted">Kode unik untuk aset (max 9 karakter)</small>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-lg text-uppercase" id="kodebarang" name="kodebarang" placeholder="Contoh: KUR01" maxlength="9" required autocomplete="off">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="button" id="btnRekomendasiKode" title="Buat kode unik dari nama aset">
+                                    <i class="fas fa-magic mr-1"></i>Rekomendasi
+                                </button>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted" id="kodeHelp">Kode unik (maksimal 9 karakter). Rekomendasi dibuat otomatis dari nama aset dan bisa diubah.</small>
                     </div>
 
                     <div class="row">
@@ -302,6 +297,61 @@ Master Aset - CRUD
             $('#kodebarang').prop('disabled', false);
         }
 
+        // Rekomendasi kode aset yang unik (berdasarkan nama aset)
+        function isiKodeRekomendasi() {
+            if (editMode) return;
+
+            const nama = ($('#namabarang').val() || '').trim();
+            if (nama === '') {
+                $('#kodeHelp').addClass('text-muted').text('Isi nama aset dulu, lalu klik Rekomendasi untuk membuat kode unik.');
+                return;
+            }
+
+            const btn = $('#btnRekomendasiKode');
+            btn.prop('disabled', true);
+
+            $.get("<?= base_url('/master-aset/generate-code'); ?>", { nama: nama })
+                .done(function(res) {
+                    if (res && res.kode) {
+                        $('#kodebarang').val(res.kode);
+                        $('#kodeHelp')
+                            .removeClass('text-danger')
+                            .addClass('text-muted')
+                            .text('Kode rekomendasi: ' + res.kode + ' (unik, bisa diubah bila perlu).');
+                    }
+                })
+                .fail(function() {
+                    $('#kodeHelp').addClass('text-danger').text('Gagal membuat rekomendasi kode. Silakan isi manual.');
+                })
+                .always(function() {
+                    btn.prop('disabled', false);
+                });
+        }
+
+        // Pastikan kode yang diketik pengguna juga unik sebelum menyimpan
+        function simpanAset(formData) {
+            const url = editMode ? "<?= base_url('/MasterAsetAPI'); ?>/" + $('#kodebarang').val() : "<?= base_url('/MasterAsetAPI'); ?>";
+
+            $.ajax({
+                url: url,
+                type: editMode ? 'PUT' : 'POST',
+                data: formData,
+                success: function() {
+                    $('#modalTambahAset').modal('hide');
+                    Swal.fire('Berhasil', editMode ? 'Data berhasil diperbarui' : 'Data berhasil ditambahkan', 'success');
+                    reloadTable();
+                },
+                error: function(err) {
+                    const body = err.responseJSON || {};
+                    const msg = body.msg
+                        || (body.messages && (body.messages.error || body.messages['Kode aset']))
+                        || (typeof body.messages === 'string' ? body.messages : null)
+                        || 'Terjadi kesalahan';
+                    Swal.fire('Error', msg, 'error');
+                }
+            });
+        }
+
         // Ensure Add button always opens modal in add mode
         $(document).on('click', '.btn-action[data-target="#modalTambahAset"]', function(e) {
             editMode = false;
@@ -313,30 +363,50 @@ Master Aset - CRUD
         $('#modalTambahAset').on('show.bs.modal', function() {
             if (!editMode) {
                 resetForm();
+                isiKodeRekomendasi();
             }
+        });
+
+        $('#btnRekomendasiKode').on('click', isiKodeRekomendasi);
+        $('#namabarang').on('blur', function() {
+            if (!editMode && !$('#kodebarang').val().trim()) {
+                isiKodeRekomendasi();
+            }
+        });
+        $('#kodebarang').on('input', function() {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
         });
 
         // Form Submit
         $('#formAset').on('submit', function(e) {
             e.preventDefault();
-            const formData = $(this).serialize();
-            const url = editMode ? "<?= base_url('/MasterAsetAPI'); ?>/" + $('#kodebarang').val() : "<?= base_url('/MasterAsetAPI'); ?>";
-            const method = editMode ? 'PUT' : 'POST';
 
-            $.ajax({
-                url: url,
-                type: method,
-                data: formData,
-                success: function(res) {
-                    $('#modalTambahAset').modal('hide');
-                    Swal.fire('Berhasil', editMode ? 'Data berhasil diperbarui' : 'Data berhasil ditambahkan', 'success');
-                    reloadTable();
-                },
-                error: function(err) {
-                    const msg = err.responseJSON?.msg || 'Terjadi kesalahan';
-                    Swal.fire('Error', msg, 'error');
+            const formData = $(this).serialize();
+            const kode = ($('#kodebarang').val() || '').trim().toUpperCase();
+
+            if (!editMode) {
+                if (!kode) {
+                    Swal.fire('Peringatan', 'Kode aset wajib diisi.', 'warning');
+                    $('#kodebarang').focus();
+                    return;
                 }
-            });
+
+                $.get("<?= base_url('/master-aset/search'); ?>", { search: kode })
+                    .done(function(res) {
+                        if (res && res.status === 'error') {
+                            Swal.fire('Kode tidak tersedia', res.msg || 'Kode aset sudah digunakan.', 'warning')
+                                .then(() => $('#kodebarang').focus());
+                            return;
+                        }
+                        simpanAset(formData);
+                    })
+                    .fail(function() {
+                        simpanAset(formData);
+                    });
+                return;
+            }
+
+            simpanAset(formData);
         });
 
         // Edit Button
@@ -385,16 +455,6 @@ Master Aset - CRUD
                         }
                     });
                 }
-            });
-        });
-
-        // Search Filter
-        $('#searchInput').on('keyup', function() {
-            const searchTerm = $(this).val().toLowerCase();
-            dataTable.rows().every(function() {
-                const row = $(this.node());
-                const text = row.text().toLowerCase();
-                row.toggle(text.includes(searchTerm));
             });
         });
     });

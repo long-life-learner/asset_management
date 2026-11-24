@@ -34,12 +34,29 @@ class MasterAset extends BaseController
 
         $model = new MasterAsetModel();
         // check by kodebarang
-        $item = $model->find($term);
+        $item = $model->find(strtoupper(trim($term)));
         if ($item) {
             return $this->response->setJSON(['status' => 'error', 'msg' => 'Kode sudah digunakan']);
         }
 
         return $this->response->setJSON(['status' => 'ok']);
+    }
+
+    /**
+     * Rekomendasi kode aset unik untuk form tambah master aset.
+     * Contoh: /master-aset/generate-code?nama=Kursi%20Putar
+     */
+    public function generateCode()
+    {
+        $model = new MasterAsetModel();
+        $nama  = (string) ($this->request->getGet('nama') ?? '');
+        $kode  = $model->generateUniqueKode($nama);
+
+        return $this->response->setJSON([
+            'status' => 'success',
+            'kode'   => $kode,
+            'unik'   => ! $model->kodeExists($kode),
+        ]);
     }
 
     public function searchLastCode()
@@ -68,19 +85,34 @@ class MasterAset extends BaseController
     public function store()
     {
         $model = new MasterAsetModel();
+        $kode  = strtoupper(trim((string) $this->request->getPost('kodebarang')));
+
+        if ($kode === '') {
+            return $this->response->setJSON(['status' => 'error', 'msg' => 'Kode aset wajib diisi.']);
+        }
+
+        if ($model->kodeExists($kode)) {
+            return $this->response->setJSON(['status' => 'error', 'msg' => 'Kode aset "' . $kode . '" sudah digunakan. Silakan gunakan kode lain.']);
+        }
+
         $data = [
-            'kodebarang'  => strtoupper($this->request->getPost('kodebarang')),
+            'kodebarang'  => $kode,
             'namabarang'  => $this->request->getPost('namabarang'),
             'merk'        => $this->request->getPost('merk'),
+            'jenisbarang' => $this->request->getPost('jenisbarang'),
             'tipebarang'  => $this->request->getPost('tipebarang'),
             'jenis_aset'  => $this->request->getPost('jenis_aset'), // 'Aset Tetap' or 'Aset Bergerak'
             'keterangan'  => $this->request->getPost('keterangan'),
         ];
 
-        if ($model->insert($data)) {
-            return $this->response->setJSON(['status' => 'success', 'msg' => 'Aset master berhasil didaftarkan']);
+        try {
+            if ($model->insert($data, false)) {
+                return $this->response->setJSON(['status' => 'success', 'msg' => 'Aset master berhasil didaftarkan']);
+            }
+        } catch (\Throwable $e) {
+            return $this->response->setJSON(['status' => 'error', 'msg' => 'Gagal mendaftarkan aset: ' . $e->getMessage()]);
         }
 
-        return $this->response->setJSON(['status' => 'error', 'msg' => 'Gagal mendaftarkan aset. Kode mungkin sudah ada.'], 500);
+        return $this->response->setJSON(['status' => 'error', 'msg' => 'Gagal mendaftarkan aset. Kode mungkin sudah ada.']);
     }
 }

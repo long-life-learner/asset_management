@@ -192,10 +192,11 @@
                     </thead>
                     <tbody id="tbodyOpname">
                         <?php foreach ($items as $idx => $it): ?>
-                            <tr data-row-id="<?= $idx; ?>" data-nama="<?= esc($it['namabarang']); ?>" data-kode="<?= esc($it['kodebarang']); ?>">
+                            <?php $namaItem = trim((string) ($it['namabarang'] ?? '')) !== '' ? trim((string) $it['namabarang']) : $it['kodebarang']; ?>
+                            <tr data-row-id="<?= $idx; ?>" data-nama="<?= esc($namaItem); ?>" data-kode="<?= esc($it['kodebarang']); ?>">
                                 <td class="text-center text-muted"><?= $idx + 1; ?></td>
                                 <td>
-                                    <span class="font-weight-bold text-dark d-block item-nama"><?= esc($it['namabarang']); ?></span>
+                                    <span class="font-weight-bold text-dark d-block item-nama"><?= esc($namaItem); ?></span>
                                 </td>
                                 <td class="text-center text-muted small item-kode"><?= esc($it['kodebarang']); ?></td>
                                 <td class="text-center small item-lokasi"><?= esc($it['namaruang'] ?: $it['lokasi']); ?></td>
@@ -237,7 +238,7 @@
 </div>
 <?= $this->endSection() ?>
 
-<?= $this->section('script') ?>
+<?= $this->section('javascript') ?>
 <script src="<?= base_url('adminLTE/plugins/datatables/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?= base_url('adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js'); ?>"></script>
 <script src="<?= base_url('adminLTE/plugins/sweetalert2/sweetalert2.min.js'); ?>"></script>
@@ -246,7 +247,6 @@
 
     $(document).ready(function() {
         dtTable = $('#tableInputOpname').DataTable({
-            "responsive": true,
             "autoWidth": false,
             "pageLength": 50,
             "lengthMenu": [25, 50, 100, 250, 500],

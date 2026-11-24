@@ -53,6 +53,7 @@ $routes->resource('AsetBangunanAPI', ['filter' => 'sso']);
 $routes->get('/master-aset', 'MasterAset::index', ['filter' => 'sso']);
 $routes->get('/master-aset/distinct/(:alpha)', 'MasterAset::distinct/$1', ['filter' => 'sso']);
 $routes->get('/master-aset/search', 'MasterAset::search', ['filter' => 'sso']);
+$routes->get('/master-aset/generate-code', 'MasterAset::generateCode', ['filter' => 'sso']);
 $routes->get('/master-aset/search-last-code', 'MasterAset::searchLastCode', ['filter' => 'sso']);
 $routes->post('/master-aset/store', 'MasterAset::store', ['filter' => 'sso']);
 
