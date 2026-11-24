@@ -57,47 +57,53 @@ class AsetBergerakModel extends Model
 
     public function getAsetBergerakLog()
     {
+        // LEFT JOIN supaya transaksi dengan master/ruang belum ada tetap tampil.
+        // "stok_saat_ini" diambil dari saldo barangbergerak sekarang, supaya
+        // bisa dibandingkan dengan "ketersediaan" (snapshot saat transaksi).
         $query = $this->db->query('
-        SELECT 
-            logasetbarang.kode, 
-            masterbarang.namabarang, 
-            masterbarang.merk, 
-            masterbarang.jenisbarang, 
-            masterbarang.tipebarang, 
-            dataruang.namaruang, 
-            logasetbarang.statusbarang, 
-            logasetbarang.jumlah, 
-            logasetbarang.ketersediaan, 
-            logasetbarang.tanggal, 
-            logasetbarang.pic, 
-            logasetbarang.user_log_in, 
+        SELECT
+            logasetbarang.kode,
+            COALESCE(NULLIF(TRIM(masterbarang.namabarang), \'\'), NULLIF(TRIM(logasetbarang.namabarang), \'\'), logasetbarang.kode) AS namabarang,
+            masterbarang.merk,
+            masterbarang.jenisbarang,
+            masterbarang.tipebarang,
+            dataruang.namaruang,
+            logasetbarang.statusbarang,
+            logasetbarang.jumlah,
+            logasetbarang.ketersediaan,
+            barangbergerak.ketersediaan AS stok_saat_ini,
+            logasetbarang.tanggal,
+            logasetbarang.pic,
+            logasetbarang.user_log_in,
             logasetbarang.tujuan,
             logasetbarang.dari,
-            logasetbarang.keterangan 
-        FROM logasetbarang 
-        JOIN masterbarang ON logasetbarang.kode = masterbarang.kodebarang
-        JOIN dataruang ON logasetbarang.lokasi = dataruang.koderuang
-        ORDER BY logasetbarang.tanggal DESC');
+            logasetbarang.keterangan
+        FROM logasetbarang
+        LEFT JOIN masterbarang ON logasetbarang.kode = masterbarang.kodebarang
+        LEFT JOIN dataruang ON logasetbarang.lokasi = dataruang.koderuang
+        LEFT JOIN barangbergerak ON logasetbarang.kode = barangbergerak.kodebarang
+        ORDER BY logasetbarang.tanggal DESC, logasetbarang.id DESC');
         return $query->getResultArray();
     }
 
     public function getAsetStock()
     {
+        // LEFT JOIN supaya aset yang belum punya master/ruang tetap tampil.
         $query = $this->db->query("
-        SELECT 
-            barangbergerak.kodebarang, 
-            masterbarang.namabarang, 
-            masterbarang.merk, 
-            masterbarang.jenisbarang, 
-            masterbarang.tipebarang, 
-            barangbergerak.ketersediaan, 
+        SELECT
+            barangbergerak.kodebarang,
+            COALESCE(NULLIF(TRIM(masterbarang.namabarang), ''), NULLIF(TRIM(barangbergerak.namabarang), ''), barangbergerak.kodebarang) AS namabarang,
+            masterbarang.merk,
+            masterbarang.jenisbarang,
+            masterbarang.tipebarang,
+            barangbergerak.ketersediaan,
             dataruang.namaruang,
             barangbergerak.keterangan
-        FROM barangbergerak 
-        JOIN masterbarang 
+        FROM barangbergerak
+        LEFT JOIN masterbarang
         ON barangbergerak.kodebarang = masterbarang.kodebarang
-        JOIN dataruang 
-        ON barangbergerak.lokasi = dataruang.koderuang;
+        LEFT JOIN dataruang
+        ON barangbergerak.lokasi = dataruang.koderuang
         ");
         return $query->getResultArray();
     }

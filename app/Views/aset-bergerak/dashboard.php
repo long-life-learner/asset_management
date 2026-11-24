@@ -76,12 +76,17 @@
         <div class="card-body p-4">
             <ul class="nav nav-pills nav-pills-custom mb-4" id="pills-tab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="pills-history-tab" data-toggle="tab" href="#pills-history" role="tab"><i class="fas fa-history mr-2"></i>Riwayat Transaksi</a>
+                    <a class="nav-link active" id="pills-history-tab" data-toggle="tab" href="#pills-history" role="tab"><i class="fas fa-history mr-2"></i>Riwayat Transaksi <span class="badge badge-light ml-1"><?= count($asetBergerakLog); ?></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="pills-stock-tab" data-toggle="tab" href="#pills-stock" role="tab"><i class="fas fa-boxes mr-2"></i>Stok Inventaris</a>
+                    <a class="nav-link" id="pills-stock-tab" data-toggle="tab" href="#pills-stock" role="tab"><i class="fas fa-boxes mr-2"></i>Stok Inventaris <span class="badge badge-light ml-1"><?= count($asetBergerakStock); ?></span></a>
                 </li>
             </ul>
+
+            <p class="text-muted small mb-3">
+                <i class="fas fa-info-circle mr-1"></i>
+                <strong>Riwayat</strong> menghitung transaksi (1 baris = 1 kali masuk/keluar), sedangkan <strong>Stok</strong> menghitung aset (1 baris = 1 kode aset). Keduanya tidak diharapkan sama. Kolom <strong>Stok Saat Ini</strong> di Riwayat menampilkan saldo database terkini agar bisa dibandingkan dengan Sisa Stok saat transaksi.
+            </p>
 
             <div class="tab-content" id="pills-tabContent">
                 <!-- Tab: History -->
@@ -94,7 +99,8 @@
                                     <th>Aset</th>
                                     <th>Status</th>
                                     <th>Jumlah</th>
-                                    <th>Sisa Stok</th>
+                                    <th>Sisa Stok (saat transaksi)</th>
+                                    <th>Stok Saat Ini</th>
                                     <th>PIC</th>
                                     <th>Tujuan/Asal</th>
                                     <th>Lokasi</th>
@@ -117,6 +123,7 @@
                                         </td>
                                         <td class="text-center font-weight-bold"><?= $log['jumlah']; ?></td>
                                         <td class="text-center"><?= $log['ketersediaan']; ?></td>
+                                        <td class="text-center font-weight-bold text-success"><?= $log['stok_saat_ini'] ?? '-'; ?></td>
                                         <td><?= $log['pic']; ?></td>
                                         <td><?= $log['statusbarang'] == 'Masuk' ? $log['dari'] : $log['tujuan']; ?></td>
                                         <td><span class="text-muted"><i class="fas fa-map-marker-alt mr-1"></i><?= $log['namaruang']; ?></span></td>
@@ -279,7 +286,7 @@ $(document).ready(function() {
     $('#dataTable1').DataTable({
         responsive: true,
         language: dtLang,
-        order: [[8, 'desc']] // Urutkan berdasarkan kolom Tanggal (data-order)
+        order: [[9, 'desc']] // Urutkan berdasarkan kolom Tanggal (data-order)
     });
 
     $('#table-detail').DataTable({

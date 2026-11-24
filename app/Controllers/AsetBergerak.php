@@ -55,15 +55,39 @@ class AsetBergerak extends BaseController
         $data = $this->request->getPost();
         $asetBergerakModel = new AsetBergerakModel();
 
-        // 1. Hitung stok baru
-        $currentStock = intval($data['stock'] ?? 0);
+        // 1. Hitung stok baru dari database (bukan dari nilai yang dikirim browser)
+        //    agar saldo tabel master dan snapshot di log selalu konsisten.
+        $kode = $data['kode'] ?? null;
+        $barang = $kode ? $asetBergerakModel->find($kode) : null;
+
+        if (!$barang) {
+            return $this->response->setJSON([
+                "status" => "error",
+                "msg"    => "Kode aset tidak ditemukan."
+            ]);
+        }
+
+        $currentStock = (int) $barang['ketersediaan'];
         $mutationQty  = intval($data['jumlah'] ?? 0);
         $isMasuk      = ($data['statusbarang'] === 'Masuk');
+        $newStock     = $isMasuk ? $currentStock + $mutationQty : $currentStock - $mutationQty;
 
-        $newStock = $isMasuk ? ($currentStock + $mutationQty) : ($currentStock - $mutationQty);
+        if ($mutationQty <= 0) {
+            return $this->response->setJSON([
+                "status" => "error",
+                "msg"    => "Jumlah transaksi harus lebih dari 0."
+            ]);
+        }
 
-        // 2. Update Master Data
-        $updateStatus = $asetBergerakModel->update($data['kode'], [
+        if (!$isMasuk && $newStock < 0) {
+            return $this->response->setJSON([
+                "status" => "error",
+                "msg"    => "Jumlah keluar melebihi stok tersedia"
+            ]);
+        }
+
+        // 2. Update stok di barangbergerak DAN masterbarang agar tetap sinkron
+        $updateStatus = $asetBergerakModel->update($kode, [
             "ketersediaan" => $newStock
         ]);
 
@@ -75,16 +99,12 @@ class AsetBergerak extends BaseController
         }
 
         // 3. Simpan Log Transaksi
+        $db = \Config\Database::connect();
+        $db->query("UPDATE masterbarang SET jumlah = ? WHERE kodebarang = ?", [$newStock, $kode]);
+
         $logTransaksiModel = new LogAsetModel();
         $users = model(UserModel::class);
         $user  = $users->find(session()->get('logged_in'));
-
-        if (!$isMasuk && $newStock < 0) {
-            return $this->response->setJSON([
-                "status" => "error",
-                "msg"    => "Jumlah keluar melebihi stok tersedia"
-            ]);
-        }
 
         $logData = [
             'kode'          => $data['kode'],
@@ -94,7 +114,7 @@ class AsetBergerak extends BaseController
             'keterangan'    => $data['keterangan'] ?? '',
             'tanggal'       => date("Y-m-d"),
             'user_log_in'   => $user->username ?? 'system',
-            'lokasi'        => $asetBergerakModel->find($data['kode'])['lokasi'] ?? '-',
+            'lokasi'        => $barang['lokasi'] ?? '-',
             'pic'           => $data['pic'] ?? '',
             'dari'          => $data['dari'] ?? '',
             'tujuan'        => $data['tujuan'] ?? ''
